@@ -22,24 +22,6 @@ $permanentQuery = "SELECT COUNT(*) AS total_permanent FROM employees WHERE emplo
 $permanentResult = mysqli_query($conn, $permanentQuery);
 $permanentCount = mysqli_fetch_assoc($permanentResult)['total_permanent'];
 
-// Fetch employees with 5 years of service
-$fiveYearsQuery = "
-  SELECT 
-    id,
-    CONCAT(last_name, ', ', first_name, ' ', COALESCE(middle_name, ''), ' ', COALESCE(extension_name, '')) AS name,
-    TIMESTAMPDIFF(YEAR, date_hired, CURDATE()) AS years_of_service,
-    employee_no,
-    employee_type,
-    position,
-    department_name
-FROM employees
-WHERE TIMESTAMPDIFF(YEAR, date_hired, CURDATE()) >= 5;
-";
-$fiveYearsResult = mysqli_query($conn, $fiveYearsQuery);
-$fiveYearsEmployees = [];
-while ($employee = mysqli_fetch_assoc($fiveYearsResult)) {
-    $fiveYearsEmployees[] = $employee;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -237,21 +219,14 @@ while ($employee = mysqli_fetch_assoc($fiveYearsResult)) {
                                     <h6 class="m-0 font-weight-bold text-primary">Employees with 5+ Years of Service</h6>
                                 </div>
                                 <div class="card-body">
-                                    <?php if (count($fiveYearsEmployees) > 0): ?>
-                                        <ul class="list-group">
-                                            <?php foreach ($fiveYearsEmployees as $employee): ?>
-                                                <li class="list-group-item">
-                                                    <strong><?php echo !empty($employee['name']) ? $employee['name'] : 'Unknown Employee'; ?></strong> 
-                                                    (<?php echo $employee['years_of_service']; ?> years)
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    <?php else: ?>
-                                        <p class="text-muted">No employees have reached 5 years of service.</p>
-                                    <?php endif; ?>
+                                    <ul id="employee-list" class="list-group">
+                                        <!-- Employees will be dynamically inserted here -->
+                                    </ul>
+                                    <p id="no-employees" class="text-muted" style="display: none;">No employees have reached 5 years of service.</p>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
