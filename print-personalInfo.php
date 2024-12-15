@@ -90,36 +90,73 @@ exit();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View PDS</title>
-    <!-- AdminLTE CSS -->
-    <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <title>PDS Reports</title>
+    <style>
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .report-header img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        .report-header h1, .report-header p {
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media print {
+            body {
+                font-family: Arial, sans-serif;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        .header1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header1 img {
+            width: 100px;
+        }
+    </style>
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
 
-    <!-- Navbar -->
-    <?php include './util/head.php'; ?>
+<body>
+    <div class="header1">
+    <img src="assets/img/logo1.jpg" alt="City Logo">
+                            <div>
+                                <p>Republic of the Philippines<br>
+                                Province of Negros Occidental<br>
+                                <strong>City of Sagay</strong><br>
+                                OFFICE OF THE HUMAN RESOURCE & MANAGEMENT<br>
+                                Cell No. 09171194285<br>
+                                Email add: <em>www.hrmosagaycity@gmail.com</em></p>
+                            </div>
+                            <img src="assets/img/SAGAY.png" alt="HR Logo">
+    </div>
 
-    <!-- Sidebar -->
-    <?php include './util/sidebar.php'; ?>
-
-    <!-- Content Wrapper -->
-    <div class="content-wrapper">
-        <!-- Content Header -->
-        <section class="content-header">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-                <h4 class="m-0"><i class="fas fa-id-card text-primary"></i> Personal Data Sheet</h4>
-                <?php $token = encrypt_id($employee_info['employee_no']);?>
-                <a href="print-personalInfo.php?token=<?php echo $token; ?>" class="btn btn-primary"><i class="fas fa-print"></i> Print</a>
-            </div>
-        </section>
-
-        <!-- Main Content -->
-        <section class="content">
+   <!-- Main Content -->
+   <section class="content">
             <div class="container-fluid">
          
 
@@ -130,9 +167,7 @@ exit();
                             <div class="card card-primary">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-user"></i> Personal Information</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_personal_info.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                               
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Full Name:</strong> <?= htmlspecialchars(trim(($employee_info['fname'] ?? '') . ' ' . ($employee_info['mname'] ?? '') . ' ' . ($employee_info['sname'] ?? '') . ' ' . ($employee_info['extension'] ?? ''))) ?></p>
@@ -153,9 +188,7 @@ exit();
                             <div class="card card-info">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-users"></i> Family Information</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_fami.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                              
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Spouse Name:</strong> <?= htmlspecialchars(trim(($family_info['spouse_sname'] ?? '') . ', ' . ($family_info['spouse_fname'] ?? '') . ' ' . ($family_info['spouse_mname'] ?? ''))) ?></p>
@@ -180,9 +213,7 @@ exit();
                             <div class="card card-success">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-graduation-cap"></i> Educational Background</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_edu.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                              
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Elementary:</strong> <?= htmlspecialchars($educational_background['elementary'] ?? '') ?>, <?= htmlspecialchars($educational_background['elem_degree'] ?? '') ?>, <?= htmlspecialchars($educational_background['elem_period'] ?? '') ?>, <?= htmlspecialchars($educational_background['elem_year'] ?? '') ?></p>
@@ -198,9 +229,7 @@ exit();
                             <div class="card card-warning">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-briefcase"></i> Work Experience</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_workexp.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                                
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Position:</strong> <?= htmlspecialchars($work_experience['position'] ?? '') ?></p>
@@ -218,9 +247,7 @@ exit();
                             <div class="card card-danger">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-flag"></i> Civil Service Eligibility</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_cs.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                               
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Career:</strong> <?= htmlspecialchars($civil_service_eligibility['career'] ?? '') ?></p>
@@ -235,9 +262,7 @@ exit();
                             <div class="card card-primary">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-hands-helping"></i> Voluntary Work</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_voluntary.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                              
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Organization:</strong> <?= htmlspecialchars($voluntary_work['org_name'] ?? '') ?></p>
@@ -255,9 +280,7 @@ exit();
                             <div class="card card-success">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-chalkboard-teacher"></i> Learning and Development</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_learning.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                          
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Title:</strong> <?= htmlspecialchars($learning_development['title'] ?? '') ?></p>
@@ -270,9 +293,7 @@ exit();
                             <div class="card card-info">
                                 <div class="card-header">
                                     <h3 class="card-title"><i class="fas fa-info-circle"></i> Other Information</h3>
-                                    <?php $token = encrypt_id($employee_info['id']);?>
-                                    <a href="edit_other_info.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm float-right">
-                                    <i class="fas fa-edit"></i></a>
+                                  
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Skills:</strong> <?= htmlspecialchars($other_info['skills'] ?? '') ?></p>
@@ -298,15 +319,11 @@ exit();
                 <?php endif; ?>
             </div>
         </section>
-    </div>
-</div>
-
-    <?php include './util/footer.php'; ?>
-
-</div>
-
-<script src="vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
-<script src="vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            window.print();
+        });
+    </script>
 </body>
+
 </html>

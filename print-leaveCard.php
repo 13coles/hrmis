@@ -60,30 +60,75 @@ if (isset($_GET['token'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Leave Card</title>
-    <!-- Admin LTE CSS -->
-    <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <style>
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .report-header img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        .report-header h1, .report-header p {
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media print {
+            body {
+                font-family: Arial, sans-serif;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        .header1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header1 img {
+            width: 100px;
+        }
+    </style>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
+<body>
+    <div class="header1">
+    <img src="assets/img/logo1.jpg" alt="City Logo">
+                            <div>
+                                <p>Republic of the Philippines<br>
+                                Province of Negros Occidental<br>
+                                <strong>City of Sagay</strong><br>
+                                OFFICE OF THE HUMAN RESOURCE & MANAGEMENT<br>
+                                Cell No. 09171194285<br>
+                                Email add: <em>www.hrmosagaycity@gmail.com</em></p>
+                            </div>
+                            <img src="assets/img/SAGAY.png" alt="HR Logo">
+    </div>
 
-    <!-- Navbar -->
-    <?php include './util/head.php'; ?>
-
-    <!-- Sidebar -->
-    <?php include './util/sidebar.php'; ?>
-
-    <!-- Content Wrapper -->
-    <div class="content-wrapper">
+<!-- Content Wrapper -->
+<div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
             <?php include './util/session-message.php'?>
@@ -109,20 +154,7 @@ if (isset($_GET['token'])) {
 
                             <!-- Leave Card Details -->
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5>Leave Card Details</h5>
-                                    <div>
-                                        <?php $token = encrypt_id($employee['employee_id']);?>
-                                        <a href="addNewCredits.php?token=<?php echo $token; ?>" class="btn btn-primary">
-                                            Add New Credits
-                                        </a>
-                                        <?php $token = encrypt_id($employee['employee_id']);?>
-                                        <a href="print-leaveCard.php?token=<?php echo $token; ?>" class="btn btn-primary">
-                                            <i class="fas fa-print"></i>
-                                        </a> 
-
-                                    </div>
-                                </div>
+                         
 
                                 <!-- Leave Card Table -->
                                 <table class="table table-bordered table-striped table-responsive-sm mt-3">
@@ -186,15 +218,12 @@ if (isset($_GET['token'])) {
             </div>
         </section>
     </div>
+<script>
+    // Automatically print the page when loaded
+    window.onload = function() {
+        window.print();
+    };
+</script>
 
-    <!-- Footer -->
-    <?php include './util/footer.php'; ?>
-
-</div>
-
-<!-- JavaScript -->
-<script src="vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
-<script src="vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
 </body>
 </html>

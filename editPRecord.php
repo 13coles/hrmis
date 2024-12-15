@@ -6,26 +6,29 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once './config/conn.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_id'])) {
-    $employee_id = intval($_POST['employee_id']);
+require './util/encrypt_helper.php';
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
+    $employee_id= decrypt_id($token);
     
     // Retrieve existing data for employee
     $query = "
-        SELECT 
-            e.id, e.employee_no, e.first_name, e.middle_name, e.last_name, 
-            e.extension_name, e.position, e.department_name, e.salary_grade, e.step,
-            e.date_hired, e.status, e.contact_number, e.height, e.weight, e.birth_date, 
-            e.birth_place, e.educational_attainment, e.course, e.blood_type, e.nationality, 
-            e.spouse_name, e.spouse_occupation, e.employee_type, 
-            ec.person_name, ec.relationship, ec.tel_no, ec.e_street, ec.e_barangay, 
-            ec.e_city, ec.e_province, g.gsis_number, g.sss_number, g.tin_number, 
-            g.philhealth_number, g.pagibig_number, g.eligibility, g.prc_number, 
-            g.prc_expiry_date
-        FROM employees e
-        LEFT JOIN emergency_contacts ec ON e.id = ec.employee_id
-        LEFT JOIN government_ids g ON e.id = g.employee_id
-        WHERE e.id = ?";
+            SELECT 
+                e.id, e.employee_no, e.first_name, e.middle_name, e.last_name, 
+                e.extension_name, e.position, e.department_name, e.salary_grade, e.step,
+                e.date_hired, e.status, e.contact_number, e.height, e.weight, e.birth_date, 
+                e.birth_place, e.educational_attainment, e.course, e.blood_type, e.nationality, 
+                e.spouse_name, e.spouse_occupation, e.employee_type, 
+                ec.person_name, ec.relationship, ec.tel_no, ec.e_street, ec.e_barangay, 
+                ec.e_city, ec.e_province, g.gsis_number, g.sss_number, g.tin_number, 
+                g.philhealth_number, g.pagibig_number, g.eligibility, g.prc_number, 
+                g.prc_expiry_date, a.street, a.barangay, a.city, a.province
+            FROM employees e
+            LEFT JOIN emergency_contacts ec ON e.id = ec.employee_id
+            LEFT JOIN government_ids g ON e.id = g.employee_id
+            LEFT JOIN address a ON e.id = a.employee_id
+            WHERE e.id = ?";
+
 
     if ($stmt = $conn->prepare($query)) {
         $stmt->bind_param('i', $employee_id);
@@ -382,6 +385,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_id'])) {
                                         <div class="col-12 text-end">
                                             
                                             <button type="submit" class="btn btn-primary me-2">Update</button>
+                                            <?php $token = encrypt_id($employee['id']);?>
+                                                <a href="viewRecord.php?token=<?php echo $token; ?>" class="btn btn-secondary">
+                                                   Go Back
+                                                </a>
                                             
                                         </div>
                                     </div>

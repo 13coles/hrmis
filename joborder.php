@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch employee records from the database
-$query = "SELECT id, employee_no, last_name, first_name, middle_name, extension_name, department_name, date_hired, position FROM employees WHERE employee_type = 'permanent' ";
+$query = "SELECT id, employee_no, last_name, first_name, middle_name, extension_name, department_name, date_hired, position FROM employees WHERE employee_type = 'jo' ";
 $result = mysqli_query($conn, $query);
 
 ?>
@@ -18,7 +18,7 @@ $result = mysqli_query($conn, $query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permanent</title>
+    <title>JOB ORDER</title>
    
     <!-- Include Admin LTE CSS -->
     <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
@@ -43,7 +43,6 @@ $result = mysqli_query($conn, $query);
         <section class="content-header">
             <div class="container-fluid">
                 <h1 class="m-0 text-dark">Employee Records</h1>
-               
             </div>
         </section>
 
@@ -56,8 +55,8 @@ $result = mysqli_query($conn, $query);
                     <div class="card-header bg-primary">
                         <h3 class="card-title">Employee Records</h3>
                         <div class="card-tools">
-                            <a href="addPRecord.php" class="btn btn-primary btn-sm me-2"><i class="fas fa-plus"></i> Add Record</a>
-                            <a href="print-permanent.php" class="btn btn-primary"><i class="fas fa-print"></i> Print</a>
+                            <a href="addJO.php" class="btn btn-primary btn-sm me-2"><i class="fas fa-plus"></i> Add Record</a>
+                            <a href="print-jo.php" class="btn btn-primary"><i class="fas fa-print"></i> Print</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -74,11 +73,9 @@ $result = mysqli_query($conn, $query);
                             </thead>
                             <tbody>
                                 <?php 
-                                // Loop through the result and display each record dynamically
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     $employeeNumber = $row['employee_no'];
 
-                                    // Construct employee name
                                     $employeeName = $row['last_name'] . ', ' . $row['first_name'];
                                     if (!empty($row['middle_name'])) {
                                         $employeeName .= ' ' . $row['middle_name'];
@@ -87,24 +84,15 @@ $result = mysqli_query($conn, $query);
                                         $employeeName .= ' ' . $row['extension_name'];
                                     }
 
-                                    // Get department name
                                     $department = $row['department_name'];
-
-                                    // Calculate years in service
                                     $dateHired = $row['date_hired'];
                                     $yearsInService = floor((strtotime(date('Y-m-d')) - strtotime($dateHired)) / (365*60*60*24));
-
-                                    // Check for 5 years of service and insert notification
                                     if ($yearsInService === 5) {
                                         $notificationMessage = "Congrats! You reached 5 years of service.";
                                         $createdAt = date('Y-m-d H:i:s');
-
-                                        // Insert notification into database
                                         $notificationQuery = "INSERT INTO notifications (employee_no, notification_message, created_at) VALUES ('$employeeNumber', '$notificationMessage', '$createdAt')";
                                         mysqli_query($conn, $notificationQuery);
                                     }
-
-                                    // Get position
                                     $position = $row['position'];
                                 ?>
                                 <tr>
@@ -125,20 +113,13 @@ $result = mysqli_query($conn, $query);
                                                     <i class="fas fa-file-alt text-primary me-2"></i> View PDS
                                                 </a>
 
-                                                <!-- View Card -->
-                                                <?php $token = encrypt_id($row['id']);?>
-                                                <a href="leaveCard.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
-                                                     <i class="fas fa-file-alt text-primary me-2"></i> View Leave Card
-                                                </a>
-
-                                                  <!-- View record-->
+                                                <!-- View record-->
                                                 <?php $token = encrypt_id($row['id']);?>
                                                 <a href="viewRecord.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
                                                     <i class="fas fa-book text-info me-2"></i> View Record
                                                 </a>
 
-
-                                                   <!-- View Certificates -->
+                                                <!-- View Certificates -->
                                                 <form action="certificates.php" method="POST" class="mb-0">
                                                     <input type="hidden" name="employee_id" value="<?php echo $row['id']; ?>">
                                                     <button type="submit" class="dropdown-item text-sm">

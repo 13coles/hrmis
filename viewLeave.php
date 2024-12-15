@@ -66,7 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_no'])) {
                     <div class="card-header">
                     <h4 >Employee Leave Records</h4>
                     <div class="card-tools">
-                        <button onclick="printContent('printArea')" class="btn btn-primary btn-md me-2"><i class="fas fa-print"></i> Print</button>
+                        <a href="print-employee-leave.php?employee_no=<?php echo urlencode($employee_no); ?>" class="btn btn-primary btn-md me-2">
+                            <i class="fas fa-print"></i> Print
+                        </a>
+
                     </div>
 
                     </div> 

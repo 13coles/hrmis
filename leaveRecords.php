@@ -54,7 +54,7 @@ $result = mysqli_query($conn, $query);
                     <div class="card-header bg-primary">
                         <h3 class="card-title">Employee Records</h3>
                         <div class="card-tools">
-                            <a href="#" class="btn btn-primary btn-md me-2"><i class="fas fa-print"></i> Print</a>
+                            <a href="print-leaveRecords.php" class="btn btn-primary btn-md me-2"><i class="fas fa-print"></i> Print</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -67,7 +67,7 @@ $result = mysqli_query($conn, $query);
                                     <th>Position</th>
                                     <th>Type of Leave</th>
                                     <th>Number of Days</th>
-                                    <th>Action</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,28 +84,7 @@ $result = mysqli_query($conn, $query);
                                         <td><?php echo $row['position']; ?></td>
                                         <td><?php echo $row['typeofLeave']; ?></td>
                                         <td><?php echo $row['numberofWork']; ?></td>
-                                        <td>
-                                            <div class="dropdown d-flex justify-content-center">
-                                                <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <!-- View -->
-                                                    <form action="viewLeave.php" method="POST" class="mb-0">
-                                                        <input type="hidden" name="employee_no" value="<?php echo $row['employee_no']; ?>">
-                                                        <button type="submit" class="dropdown-item text-sm">
-                                                            <i class="fas fa-file-alt text-primary me-2"></i> View More
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <!-- Delete Employee -->
-                                                    <form action="forms/deleteEmployee.php" method="POST" class="mb-0" onsubmit="return confirmDelete();">
-                                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                        <button type="submit" class="dropdown-item text-sm text-danger">
-                                                            <i class="fas fa-trash-alt text-danger me-2"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        
                                     </tr>
                                 <?php 
                                     }

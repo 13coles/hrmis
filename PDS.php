@@ -33,6 +33,7 @@ require_once './config/conn.php';
         <!-- Main Content -->
         <section class="content">
             <div class="container-fluid">
+            <?php include './util/session-message.php'?>
         
 
                 <!-- Card with Nav List -->

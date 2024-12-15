@@ -31,17 +31,17 @@
                     </a>
                 </li>
                 
-                <!-- <li class="nav-item">
-                    <a href="permanent.php" class="nav-link">
+                <li class="nav-item">
+                    <a href="joborder.php" class="nav-link">
                         <i class="nav-icon fas fa-user-tie" style="color: #f8d90f;"></i>
-                        <p style="font-weight: bold; color: #ffffff; text-shadow: 1px 1px 2px #000;">Permanent Records</p>
+                        <p style="font-weight: bold; color: #ffffff; text-shadow: 1px 1px 2px #000;">Job Order Records</p>
                     </a>
-                </li> -->
+                </li>
 
                 <li class="nav-item">
                     <a href="permanent.php" class="nav-link">
                         <i class="nav-icon fas fa-clipboard-list" style="color: #f8d90f;"></i>
-                        <p style="font-weight: bold; color: #ffffff; text-shadow: 1px 1px 2px #000;">Employee Records</p>
+                        <p style="font-weight: bold; color: #ffffff; text-shadow: 1px 1px 2px #000;">Permanent Records</p>
                     </a>
                 </li>
 

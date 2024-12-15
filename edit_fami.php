@@ -38,7 +38,7 @@ require_once './config/conn.php';
                 <!-- Card with Nav List -->
                 <div class="card mt-2">
                     <div class="card-header bg-primary">
-                        <h3 class="card-title"><a href="PDS.php" class="text-white">Back</a> / Family Background</h3>
+                        <h3 class="card-title"> Family Background</h3>
                     </div>
                     <div class="card-body">
                     <form action="PDS/insert_family.php" method="POST">
@@ -170,8 +170,7 @@ require_once './config/conn.php';
                         <!-- Submission Buttons -->
                         <div class="row mt-3 float-right">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="educational.php" class="btn btn-secondary">Skip</a>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </div>
                     </form>

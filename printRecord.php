@@ -71,46 +71,75 @@ if (isset($_GET['token'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Record</title>
-    <!-- AdminLTE CSS -->
-    <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <title>Employee Report</title>
+    <style>
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .report-header img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        .report-header h1, .report-header p {
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media print {
+            body {
+                font-family: Arial, sans-serif;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        .header1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header1 img {
+            width: 100px;
+        }
+    </style>
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
-    <!-- Navbar -->
-    <?php include './util/head.php'; ?>
-    <!-- Sidebar -->
-    <?php include './util/sidebar.php'; ?>
 
-    <!-- Content Wrapper -->
-    <div class="content-wrapper">
-        <!-- Content Header -->
-        <section class="content-header">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-                <h4 class="m-0 d-flex align-items-center">
-                    <i class="fas fa-id-card text-primary mr-2"></i> Employee Record
-                </h4>
+<body>
+    <div class="header1">
+    <img src="assets/img/logo1.jpg" alt="City Logo">
+                            <div>
+                                <p>Republic of the Philippines<br>
+                                Province of Negros Occidental<br>
+                                <strong>City of Sagay</strong><br>
+                                OFFICE OF THE HUMAN RESOURCE & MANAGEMENT<br>
+                                Cell No. 09171194285<br>
+                                Email add: <em>www.hrmosagaycity@gmail.com</em></p>
+                            </div>
+                            <img src="assets/img/SAGAY.png" alt="HR Logo">
+    </div>
 
-                <div class="d-flex align-items-center">
-                    <?php $token = encrypt_id($employee['employee_id']);?>
-                     <a href="editPRecord.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm mr-3">
-                    <i class="fas fa-edit"></i> Edit Record</a>
-
-                    <?php $token = encrypt_id($employee['employee_id']);?>
-                    <a href="printRecord.php?token=<?php echo $token; ?>" class="btn btn-primary"><i class="fas fa-print"></i> Print</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main Content -->
-        <section class="content">
+   <!-- Main Content -->
+   <section class="content">
             <div class="container-fluid">
                 <?php if (!isset($employee)): ?>
                     <div class="alert alert-warning">No employee record found.</div>
@@ -319,12 +348,11 @@ if (isset($_GET['token'])) {
                 <?php endif; ?>
             </div>
         </section>
-    </div>
-</div>
-
-<!-- AdminLTE JS -->
-<script src="vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
-<script src="vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            window.print();
+        });
+    </script>
 </body>
+
 </html>
