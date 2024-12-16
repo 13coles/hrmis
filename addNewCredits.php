@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 // Include required files
 require_once './config/conn.php';
 require './util/encrypt_helper.php';
-
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
     $employee_id = decrypt_id($token);
@@ -19,6 +18,7 @@ if (isset($_GET['token'])) {
     $employeeQuery = $conn->prepare("
         SELECT 
             id AS employee_id,
+            employee_no,  -- Include employee_no here
             CONCAT(last_name, ', ', first_name, ' ', IFNULL(middle_name, ''), ' ', IFNULL(extension_name, '')) AS name,
             sex, 
             civil_status, 
@@ -127,7 +127,7 @@ if (isset($_GET['token'])) {
                     <div class="col-lg-12 mt-2">
                         <form action="forms/insert_newCredits.php" method="post">
                             <input type="hidden" name="employee_id" value="<?= htmlspecialchars($employee['employee_id']) ?>">
-
+                            <input type="hidden" name="employee_no" value="<?= htmlspecialchars($employee['employee_no'])?>">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
                                     <h5>Add New Credits for Leave Card</h5>
@@ -244,5 +244,6 @@ if (isset($_GET['token'])) {
 <script src="vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
+<script src="./assets/js/script.js"></script>
 </body>
 </html>

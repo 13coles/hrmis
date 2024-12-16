@@ -734,5 +734,6 @@ if (isset($_POST['employee_id'])) {
 <script src="vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
+<script src="./assets/js/script.js"></script>
 </body>
 </html>

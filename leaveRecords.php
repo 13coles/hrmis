@@ -67,7 +67,7 @@ $result = mysqli_query($conn, $query);
                                     <th>Position</th>
                                     <th>Type of Leave</th>
                                     <th>Number of Days</th>
-                                    
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,6 +84,20 @@ $result = mysqli_query($conn, $query);
                                         <td><?php echo $row['position']; ?></td>
                                         <td><?php echo $row['typeofLeave']; ?></td>
                                         <td><?php echo $row['numberofWork']; ?></td>
+                                        <td>
+                                            <div class="dropdown d-flex justify-content-center">
+                                                <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <!-- View -->
+                                                    <form action="viewLeave.php" method="POST" class="mb-0">
+                                                        <input type="hidden" name="employee_no" value="<?php echo $row['employee_no']; ?>">
+                                                        <button type="submit" class="dropdown-item text-sm">
+                                                            <i class="fas fa-file-alt text-primary me-2"></i> View More
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
                                         
                                     </tr>
                                 <?php 
@@ -114,6 +128,7 @@ $result = mysqli_query($conn, $query);
 <script src="vendor/almasaeed2010/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="./assets/js/script.js"></script>
 <script>
 $(document).ready(function () {
     $('#apple_table').DataTable({

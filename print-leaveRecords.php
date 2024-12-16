@@ -19,49 +19,97 @@ $result = mysqli_query($conn, $query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leave Record Reports</title>
     <style>
-        .report-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .report-header img {
-            max-width: 150px;
-            margin-bottom: 10px;
-        }
-        .report-header h1, .report-header p {
+   
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .report-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .report-header img {
+        max-width: 150px;
+        margin-bottom: 10px;
+    }
+
+    .report-header h1,
+    .report-header p {
+        margin: 0;
+    }
+
+   
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    
+    @media print {
+        body {
             margin: 0;
+            padding: 0;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        @media print {
-            body {
-                font-family: Arial, sans-serif;
-            }
-            table {
-                page-break-inside: avoid;
-            }
-        }
+
         .header1 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin: 0;
+            padding: 0;
+            text-align: center;
         }
-        .header1 img {
-            width: 100px;
+
+        table {
+            page-break-inside: avoid; 
+            margin: 0 auto; 
         }
-    </style>
+
+       
+        .content {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    
+    .header1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .header1 img {
+        width: 100px;
+    }
+
+   
+    .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+</style>
+
 </head>
 
 <body>
@@ -77,18 +125,10 @@ $result = mysqli_query($conn, $query);
                             </div>
                             <img src="assets/img/SAGAY.png" alt="HR Logo">
     </div>
-
+<h3>Leave Records</h3>
     <!-- Main Content -->
     <section class="content">
-            <div class="container-fluid">
-            <?php include './util/session-message.php'?>
-                <!-- Table for Employee Records -->
-                <div class="card">
-                    <div class="card-header bg-primary">
-                        <h3 class="card-title">Employee Records</h3>
-                        
-                    </div>
-                    <div class="card-body">
+          
                         <table id="apple_table" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -98,7 +138,7 @@ $result = mysqli_query($conn, $query);
                                     <th>Position</th>
                                     <th>Type of Leave</th>
                                     <th>Number of Days</th>
-                                    <th>Action</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -115,28 +155,7 @@ $result = mysqli_query($conn, $query);
                                         <td><?php echo $row['position']; ?></td>
                                         <td><?php echo $row['typeofLeave']; ?></td>
                                         <td><?php echo $row['numberofWork']; ?></td>
-                                        <td>
-                                            <div class="dropdown d-flex justify-content-center">
-                                                <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <!-- View -->
-                                                    <form action="viewLeave.php" method="POST" class="mb-0">
-                                                        <input type="hidden" name="employee_no" value="<?php echo $row['employee_no']; ?>">
-                                                        <button type="submit" class="dropdown-item text-sm">
-                                                            <i class="fas fa-file-alt text-primary me-2"></i> View More
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <!-- Delete Employee -->
-                                                    <form action="forms/deleteEmployee.php" method="POST" class="mb-0" onsubmit="return confirmDelete();">
-                                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                        <button type="submit" class="dropdown-item text-sm text-danger">
-                                                            <i class="fas fa-trash-alt text-danger me-2"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </td>
+                                      
                                     </tr>
                                 <?php 
                                     }
@@ -146,9 +165,7 @@ $result = mysqli_query($conn, $query);
                                 ?>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
+              
         </section>
     <script>
         window.addEventListener('load', function() {

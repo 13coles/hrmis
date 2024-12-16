@@ -250,6 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_no'])) {
 <script src="vendor/almasaeed2010/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="./assets/js/script.js"></script>
 <script>
 function printContent(elementId) {
     const printContents = document.getElementById(elementId).innerHTML;

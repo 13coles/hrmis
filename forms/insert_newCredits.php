@@ -2,78 +2,76 @@
 require_once '../config/conn.php';
 require '../util/encrypt_helper.php';
 
-session_start(); 
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Fetch all form data
-    $employee_id = (int) $_POST['employee_id'];
-    $year = (int) $_POST['year'];
-    $le_vac = isset($_POST['le_vac']) ? (float) $_POST['le_vac'] : null;
-    $le_sck = isset($_POST['le_sck']) ? (float) $_POST['le_sck'] : null;
-    $from_to = $_POST['from_to'];
-    $lt_wp_vac = isset($_POST['lt_wp_vac']) ? (float) $_POST['lt_wp_vac'] : null;
-    $lt_wp_sck = isset($_POST['lt_wp_sck']) ? (float) $_POST['lt_wp_sck'] : null;
-    $lt_np_vac = isset($_POST['lt_np_vac']) ? (float) $_POST['lt_np_vac'] : null;
-    $lt_np_sck = isset($_POST['lt_np_sck']) ? (float) $_POST['lt_np_sck'] : null;
-    $u_vac = isset($_POST['u_vac']) ? (float) $_POST['u_vac'] : null;
-    $u_sck = isset($_POST['u_sck']) ? (float) $_POST['u_sck'] : null;
-    $b_vac = isset($_POST['b_vac']) ? (float) $_POST['b_vac'] : null;
-    $b_sck = isset($_POST['b_sck']) ? (float) $_POST['b_sck'] : null;
-    $p_initial = $_POST['p_initial'];
-    $p_date = $_POST['p_date'];
+    // Fetch and sanitize all form data
+    $employee_id = filter_input(INPUT_POST, 'employee_id', FILTER_VALIDATE_INT);
+    $employee_no = trim($_POST['employee_no']);
+    $year = filter_input(INPUT_POST, 'year', FILTER_VALIDATE_INT);
+    $le_vac = filter_input(INPUT_POST, 'le_vac', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $le_sck = filter_input(INPUT_POST, 'le_sck', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $from_to = trim($_POST['from_to']);
+    $lt_wp_vac = filter_input(INPUT_POST, 'lt_wp_vac', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $lt_wp_sck = filter_input(INPUT_POST, 'lt_wp_sck', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $lt_np_vac = filter_input(INPUT_POST, 'lt_np_vac', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $lt_np_sck = filter_input(INPUT_POST, 'lt_np_sck', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $u_vac = filter_input(INPUT_POST, 'u_vac', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $u_sck = filter_input(INPUT_POST, 'u_sck', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $b_vac = filter_input(INPUT_POST, 'b_vac', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $b_sck = filter_input(INPUT_POST, 'b_sck', FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    $p_initial = trim($_POST['p_initial']);
+    $p_date = trim($_POST['p_date']);
+
 
     // Calculate the new balances for b_vac and b_sck
-    $new_b_vac = ($le_vac + $b_vac); 
-    $new_b_sck = ($le_sck + $b_sck); 
+    $new_b_vac = ($le_vac ?? 0) + ($b_vac ?? 0);
+    $new_b_sck = ($le_sck ?? 0) + ($b_sck ?? 0);
 
-    // Insert new record
-    $query = "INSERT INTO pelc (employee_id, year, le_vac, le_sck, from_to, lt_wp_vac, lt_wp_sck, lt_np_vac, lt_np_sck, u_vac, u_sck, b_vac, b_sck, p_initial, p_date) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // Prepare SQL query
+    $query = "INSERT INTO pelc 
+              (employee_id, employee_no, year, le_vac, le_sck, from_to, lt_wp_vac, lt_wp_sck, lt_np_vac, lt_np_sck, u_vac, u_sck, b_vac, b_sck, p_initial, p_date) 
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
 
     if (!$stmt) {
-        // Set session error message if prepare fails
-        $_SESSION['error'] = "Prepare failed: " . $conn->error;
+        $_SESSION['error'] = "Database error: " . $conn->error;
         $token = encrypt_id($employee_id);
-        header("Location: ../leaveCard.php?token=$token"); 
+        header("Location: ../leaveCard.php?token=$token");
         exit();
     }
 
     // Bind parameters
     $stmt->bind_param(
-        "iisdssdssdssdss", 
-        $employee_id, 
-        $year, 
-        $le_vac, 
-        $le_sck, 
-        $from_to, 
-        $lt_wp_vac, 
-        $lt_wp_sck, 
-        $lt_np_vac, 
-        $lt_np_sck, 
-        $u_vac, 
-        $u_sck, 
-        $new_b_vac, 
-        $new_b_sck, 
-        $p_initial, 
+        "isisdssdssdssdss",
+        $employee_id,
+        $employee_no,
+        $year,
+        $le_vac,
+        $le_sck,
+        $from_to,
+        $lt_wp_vac,
+        $lt_wp_sck,
+        $lt_np_vac,
+        $lt_np_sck,
+        $u_vac,
+        $u_sck,
+        $new_b_vac,
+        $new_b_sck,
+        $p_initial,
         $p_date
     );
 
-    // Execute and handle errors
+    // Execute the query and handle success or errors
     if ($stmt->execute()) {
-        // Set session success message
         $_SESSION['success'] = "New record added successfully.";
-        $token = encrypt_id($employee_id);
-        header("Location: ../leaveCard.php?token=$token"); 
-        exit();
     } else {
-        // Set session error message if execution fails
-        $_SESSION['error'] = "Error: " . $stmt->error;
-        $token = encrypt_id($employee_id);
-        header("Location: ../leaveCard.php?token=$token"); 
-        exit();
+        $_SESSION['error'] = "Database error: " . $stmt->error;
     }
 
-    $stmt->close();
+    // Redirect user back with encrypted token
+    $token = encrypt_id($employee_id);
+    header("Location: ../leaveCard.php?token=$token");
+    exit();
 }
 ?>
