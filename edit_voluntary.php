@@ -5,13 +5,39 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 require_once './config/conn.php';
+require './util/encrypt_helper.php';
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
+    $voluntary_work_id = decrypt_id($token);
+    
+    $query = "
+            SELECT *
+            FROM voluntary_work
+            WHERE id = ?";
+
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $voluntary_work_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $voluntary_work = $result->fetch_assoc();
+        } else {
+            echo "No record Found.";
+            exit();
+        }
+        $stmt->close();
+    } else {
+        die("Error preparing statement: " . $conn->error);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Voluntary Work </title>
+    <title>Voluntary Work</title>
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
@@ -38,20 +64,22 @@ require_once './config/conn.php';
                         </h3>
                     </div>
                     <div class="card-body">
-                    <form action="PDS/insert_voluntary_work.php" method="POST">
+                    <form action="PDS/update_voluntary_work.php" method="POST">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($voluntary_work['id']) ?>">
+
                         <div class="row">
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required>
+                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required value="<?= htmlspecialchars($voluntary_work['employee_no']) ?>">
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
                                 <div class="row">
-                                    <!-- Career Service Fields -->
+                                    <!-- Voluntary Work Fields -->
                                     <div class="col-md-6 mb-2">
                                         <label>29. Name & Address Of Organization:</label>
-                                        <input type="text" name="org[]" class="form-control" placeholder=" (Write in full)">
+                                        <input type="text" name="org_name[]" class="form-control" placeholder=" (Write in full)" required>
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label>Inclusive Date</label>
@@ -69,7 +97,7 @@ require_once './config/conn.php';
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Position/Nature Work:</label>
-                                        <input type="text" name="nature_work[]" class="form-control" placeholder="Position/Nature Work" required>
+                                        <input type="text" name="nature_of_work[]" class="form-control" placeholder="Position/Nature Work" required>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +115,6 @@ require_once './config/conn.php';
                             </div>
                         </div>
                     </form>
-
 
                     </div>
                 </div>

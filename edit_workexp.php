@@ -5,6 +5,33 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 require_once './config/conn.php';
+require './util/encrypt_helper.php';
+
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
+    $work_experience_id = decrypt_id($token);
+
+    $query = "
+            SELECT *
+            FROM work_experience
+            WHERE id = ?";
+
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $work_experience_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $work_experience = $result->fetch_assoc();
+        } else {
+            echo "No record Found.";
+            exit();
+        }
+        $stmt->close();
+    } else {
+        die("Error preparing statement: " . $conn->error);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,12 +65,13 @@ require_once './config/conn.php';
                         </h3>
                     </div>
                     <div class="card-body">
-                    <form action="PDS/insert_workexp.php" method="POST">
+                    <form action="PDS/update_workexp.php" method="POST">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($work_experience['id']) ?>">
                         <div class="row">
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required>
+                                <input type="text" name="employee_no" class="form-control" value="<?= htmlspecialchars($work_experience['employee_no']) ?>" placeholder="Agency Employee Number" required>
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
@@ -52,40 +80,40 @@ require_once './config/conn.php';
                                     <div class="col-md-6 mb-2">
                                         <label>28. Inclusive Date</label>
                                         <label>From</label>
-                                        <input type="date" name="from[]" class="form-control" required>
+                                        <input type="date" name="from[]" class="form-control" value="<?= htmlspecialchars($work_experience['from_date']) ?>" required>
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label>To</label>
-                                        <input type="date" name="to[]" class="form-control" required>
+                                        <input type="date" name="to[]" class="form-control" value="<?= htmlspecialchars($work_experience['to_date']) ?>" required>
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Position Title:</label>
-                                        <input type="text" name="position[]" class="form-control" placeholder="(Write in full/Do not abbreviate)" required>
+                                        <input type="text" name="position[]" class="form-control" value="<?= htmlspecialchars($work_experience['position']) ?>" placeholder="(Write in full/Do not abbreviate)" required>
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Department/Agency/Office/Company:</label>
-                                        <input type="text" name="department[]" class="form-control" placeholder="(Write in full/Do not abbreviate)" required>
+                                        <input type="text" name="department[]" class="form-control" value="<?= htmlspecialchars($work_experience['department']) ?>" placeholder="(Write in full/Do not abbreviate)" required>
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Monthly Salary:</label>
-                                        <input type="text" name="salary[]" class="form-control" placeholder="Monthly Salary" required>
+                                        <input type="text" name="salary[]" class="form-control" value="<?= htmlspecialchars($work_experience['salary']) ?>" placeholder="Monthly Salary" required>
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Salary/Job/Pay Grade:</label>
-                                        <input type="text" name="salary_grade[]" class="form-control" placeholder="(if applicable) Step (format *00-0*)/Increment" required>
+                                        <input type="text" name="salary_grade[]" class="form-control" value="<?= htmlspecialchars($work_experience['salary_grade']) ?>" placeholder="(if applicable) Step (format *00-0*)/Increment" required>
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Status of Appointment:</label>
-                                        <input type="text" name="status_appointment[]" class="form-control" placeholder="(if applicable) Step (format *00-0*)/Increment" required>
+                                        <input type="text" name="status_appointment[]" class="form-control" value="<?= htmlspecialchars($work_experience['status_appointment']) ?>" placeholder="(if applicable) Step (format *00-0*)/Increment" required>
                                     </div>
                                     <div class="col-md-3 mt-2">
                                         <label>Gov't Service:</label>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="gov[]" class="form-check-input" id="gov_yes" value="yes" required>
+                                            <input type="radio" name="gov[]" class="form-check-input" id="gov_yes" value="yes" <?= $work_experience['gov_service'] == 'yes' ? 'checked' : '' ?> required>
                                             <label class="form-check-label" for="gov_yes">Yes</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="gov[]" class="form-check-input" id="gov_no" value="no" required>
+                                            <input type="radio" name="gov[]" class="form-check-input" id="gov_no" value="no" <?= $work_experience['gov_service'] == 'no' ? 'checked' : '' ?> required>
                                             <label class="form-check-label" for="gov_no">No</label>
                                         </div>
                                     </div>
@@ -102,12 +130,9 @@ require_once './config/conn.php';
                             <!-- Submission Buttons -->
                             <div class="col-12 text-right mt-3">
                                 <button type="submit" class="btn btn-primary">Update</button>
-                            
-                            </div>
+                             </div>
                         </div>
                     </form>
-
-
                     </div>
                 </div>
             </div>

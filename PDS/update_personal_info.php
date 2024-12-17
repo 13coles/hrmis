@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telno = sanitizeInput($_POST['telno']);
     $mobileno = sanitizeInput($_POST['mobileno']);
     $email = sanitizeInput($_POST['email']);
-    $personal_info_id = sanitizeInput($_POST['id']); // Ensure ID is passed correctly
+    $personal_info_id = sanitizeInput($_POST['id']); 
 
     // Update query
     $query = "UPDATE personal_info SET

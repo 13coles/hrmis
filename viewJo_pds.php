@@ -110,21 +110,21 @@ exit();
     <!-- Content Wrapper -->
     <div class="content-wrapper">
         <!-- Content Header -->
-        
+   
+
         <!-- Main Content -->
         <section class="content">
             <div class="container-fluid">
-         
+            <?php include './util/session-message.php'?>
 
                 <?php if ($employee_info): ?>
                     <section class="content-header">
                         <div class="container-fluid d-flex justify-content-between align-items-center">
                             <h4 class="m-0"><i class="fas fa-id-card text-primary"></i> Personal Data Sheet</h4>
                             <?php $token = encrypt_id($employee_info['employee_no']);?>
-                            <a href="print-personalInfo.php?token=<?php echo $token; ?>" class="btn btn-primary"><i class="fas fa-print"></i> Print</a>
+                            <a href="print_joPDS.php?token=<?php echo $token; ?>" class="btn btn-primary"><i class="fas fa-print"></i> Print</a>
                         </div>
                     </section>
-
                     <div class="row">
                         <!-- Personal Information Card -->
                         <div class="col-md-6">

@@ -40,20 +40,20 @@ require_once './config/conn.php';
                     <div class="card-body">
                         <form action="PDS/insert_education.php" method="POST">
                             <div class="row">
-                                <!-- Employee Details -->
+                                <!-- Employee Number -->
                                 <div class="col-md-12 mb-2">
-                                    <label>Employee No:</label>
-                                    <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required>
+                                    <label for="employee_no">Employee No:</label>
+                                    <input type="text" id="employee_no" name="employee_no" class="form-control" placeholder="Agency Employee Number" required>
                                 </div>
                                 
                                 <!-- Educational Background -->
                                 <?php
                                 $educationLevels = [
-                                    "Elementary" => "elementary",
-                                    "Secondary" => "secondary",
-                                    "Vocational/TradeCourse" => "vocational",
-                                    "College" => "college",
-                                    "Graduate Studies" => "graduate"
+                                    "Elementary" => "elem",
+                                    "Secondary" => "sec",
+                                    "Vocational/Trade Course" => "voc",
+                                    "College" => "col",
+                                    "Graduate Studies" => "grad"
                                 ];
                                 foreach ($educationLevels as $levelName => $levelField) {
                                 ?>
@@ -61,28 +61,28 @@ require_once './config/conn.php';
                                     <h5><?php echo $levelName; ?>:</h5>
                                     <div class="row">
                                         <div class="col-md-4 mb-2">
-                                            <label>Name of School</label>
-                                            <input type="text" name="<?php echo $levelField; ?>" class="form-control" placeholder="Name of School">
+                                            <label for="<?php echo $levelField; ?>">Name of School</label>
+                                            <input type="text" id="<?php echo $levelField; ?>" name="<?php echo $levelField; ?>" class="form-control" placeholder="Name of School" required>
                                         </div>
                                         <div class="col-md-4 mb-2">
-                                            <label>Degree/Course</label>
-                                            <input type="text" name="<?php echo $levelField; ?>Degree" class="form-control" placeholder="Degree or Course">
+                                            <label for="<?php echo $levelField; ?>_degree">Degree/Course</label>
+                                            <input type="text" id="<?php echo $levelField; ?>_degree" name="<?php echo $levelField; ?>_degree" class="form-control" placeholder="Degree or Course">
                                         </div>
                                         <div class="col-md-4 mb-2">
-                                            <label>Period of Attendance</label>
-                                            <input type="text" name="<?php echo $levelField; ?>Period" class="form-control" placeholder="e.g., 2010-2014">
+                                            <label for="<?php echo $levelField; ?>_period">Period of Attendance</label>
+                                            <input type="text" id="<?php echo $levelField; ?>_period" name="<?php echo $levelField; ?>_period" class="form-control" placeholder="e.g., 2010-2014">
                                         </div>
                                         <div class="col-md-4 mb-2">
-                                            <label>Highest Level</label>
-                                            <input type="text" name="<?php echo $levelField; ?>Level" class="form-control" placeholder="e.g., 4th Year">
+                                            <label for="<?php echo $levelField; ?>_level">Highest Level</label>
+                                            <input type="text" id="<?php echo $levelField; ?>_level" name="<?php echo $levelField; ?>_level" class="form-control" placeholder="e.g., 4th Year">
                                         </div>
                                         <div class="col-md-4 mb-2">
-                                            <label>Year Graduated</label>
-                                            <input type="text" name="<?php echo $levelField; ?>Year" class="form-control" placeholder="e.g., 2014">
+                                            <label for="<?php echo $levelField; ?>_year">Year Graduated</label>
+                                            <input type="text" id="<?php echo $levelField; ?>_year" name="<?php echo $levelField; ?>_year" class="form-control" placeholder="e.g., 2014">
                                         </div>
                                         <div class="col-md-4 mb-2">
-                                            <label>Academic Honors</label>
-                                            <input type="text" name="<?php echo $levelField; ?>Acad" class="form-control" placeholder="e.g., Cum Laude">
+                                            <label for="<?php echo $levelField; ?>_acad">Academic Honors</label>
+                                            <input type="text" id="<?php echo $levelField; ?>_acad" name="<?php echo $levelField; ?>_acad" class="form-control" placeholder="e.g., Cum Laude">
                                         </div>
                                     </div>
                                 </div>

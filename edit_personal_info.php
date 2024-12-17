@@ -58,7 +58,7 @@ if (isset($_GET['token'])) {
         <!-- Main Content -->
         <section class="content">
             <div class="container-fluid">
-        
+            <?php include './util/session-message.php'; ?>
 
                 <!-- Card with Nav List -->
                 <div class="card mt-2">
@@ -66,13 +66,13 @@ if (isset($_GET['token'])) {
                         <h3 class="card-title"> Edit Personal Information</h3>
                     </div>
                     <div class="card-body">
-                    <form action="PDS/update_personal_info.php" method="POST">
+                    <form action="PDS/update_fami.php" method="POST">
                         <input type="hidden" name="id" value="<?= htmlspecialchars($personal_info['id']) ?>">
                         <div class="row">
                             <!-- Employee Details -->
                             <div class="col-md-6 mb-2">
                                 <label>1. Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" value="<?= htmlspecialchars($personal_info['employee_no']) ?>"  placeholder="Agency Employee Number">
+                                <input type="text" name="employee_no" class="form-control" value="<?= htmlspecialchars($personal_info['employee_no']) ?>"  readonly>
                             </div>
                             <div class="col-md-6 mb-2">
                                 <label>2. CS ID No:</label>

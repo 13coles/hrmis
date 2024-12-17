@@ -4,7 +4,36 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
 require_once './config/conn.php';
+require './util/encrypt_helper.php';
+
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
+    $civil_service_eligibility_id = decrypt_id($token);
+    
+    // Query to fetch the educational background details
+    $query = "
+        SELECT *
+        FROM civil_service_eligibility
+        WHERE id = ?";
+    
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $civil_service_eligibility_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            $civil_service_eligibility = $result->fetch_assoc();
+        } else {
+            echo "No record Found.";
+            exit();
+        }
+        $stmt->close();
+    } else {
+        die("Error preparing statement: " . $conn->error);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,12 +67,13 @@ require_once './config/conn.php';
                         </h3>
                     </div>
                     <div class="card-body">
-                    <form action="PDS/insert_civil_service.php" method="POST">
+                    <form action="PDS/update_civil_service.php" method="POST">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($civil_service_eligibility['id']) ?>">
                         <div class="row">
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required>
+                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" value="<?= htmlspecialchars($civil_service_eligibility['employee_no']) ?>" required>
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
@@ -51,23 +81,23 @@ require_once './config/conn.php';
                                     <!-- Career Service Fields -->
                                     <div class="col-md-12 mb-2">
                                         <label>27. Career Service:</label>
-                                        <input type="text" name="career[]" class="form-control" placeholder="RA 1080(BOARD/BAR)Under Special Laws/CES/CSEE/Barangay Eligibility/Drivers License">
+                                        <input type="text" name="career[]" class="form-control" placeholder="RA 1080(BOARD/BAR)Under Special Laws/CES/CSEE/Barangay Eligibility/Drivers License" value="<?= htmlspecialchars($civil_service_eligibility['career']) ?>">
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Rating:</label>
-                                        <input type="text" name="rating[]" class="form-control" placeholder="(if applicable)">
+                                        <input type="text" name="rating[]" class="form-control" placeholder="(if applicable)" value="<?= htmlspecialchars($civil_service_eligibility['rating']) ?>">
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Date of Examination/Conferment:</label>
-                                        <input type="date" name="date_exam[]" class="form-control">
+                                        <input type="date" name="date_exam[]" class="form-control" value="<?= htmlspecialchars($civil_service_eligibility['date_exam']) ?>">
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Place of Examination/Conferment:</label>
-                                        <input type="text" name="place_exam[]" class="form-control" placeholder="Place of Examination">
+                                        <input type="text" name="place_exam[]" class="form-control" placeholder="Place of Examination" value="<?= htmlspecialchars($civil_service_eligibility['place_exam']) ?>">
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>License:</label>
-                                        <input type="text" name="license_no[]" class="form-control" placeholder="Number & Date of Validity (if applicable)">
+                                        <input type="text" name="license_no[]" class="form-control" placeholder="Number & Date of Validity (if applicable)" value="<?= htmlspecialchars($civil_service_eligibility['license_no']) ?>">
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +111,6 @@ require_once './config/conn.php';
                             <!-- Submission Buttons -->
                             <div class="col-12 text-right mt-3">
                                 <button type="submit" class="btn btn-primary">Update</button>
-                           
                             </div>
                         </div>
                     </form>

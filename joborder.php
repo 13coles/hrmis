@@ -109,13 +109,13 @@ $result = mysqli_query($conn, $query);
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <!-- View PDS -->
                                                 <?php $token = encrypt_id($row['employee_no']);?>
-                                                <a href="view_personalInfo.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
+                                                <a href="viewJo_pds.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
                                                     <i class="fas fa-file-alt text-primary me-2"></i> View PDS
                                                 </a>
 
                                                 <!-- View record-->
                                                 <?php $token = encrypt_id($row['id']);?>
-                                                <a href="viewRecord.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
+                                                <a href="viewJO_record.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
                                                     <i class="fas fa-book text-info me-2"></i> View Record
                                                 </a>
 

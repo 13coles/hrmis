@@ -5,6 +5,32 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 require_once './config/conn.php';
+require './util/encrypt_helper.php';
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
+    $other_info_id = decrypt_id($token);
+    
+    $query = "
+            SELECT *
+            FROM other_info
+            WHERE id = ?";
+
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $other_info_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $other_info = $result->fetch_assoc();
+        } else {
+            echo "No record Found.";
+            exit();
+        }
+        $stmt->close();
+    } else {
+        die("Error preparing statement: " . $conn->error);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,12 +64,13 @@ require_once './config/conn.php';
                         </h3>
                     </div>
                     <div class="card-body">
-                    <form action="PDS/insert_other.php" method="POST">
+                    <form action="PDS/update_other.php" method="POST">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($other_info['id']) ?>">
                         <div class="row">
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required>
+                                <input type="text" name="employee_no" class="form-control" value="<?= htmlspecialchars($other_info['employee_no']) ?>" readonly>
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
@@ -51,67 +78,67 @@ require_once './config/conn.php';
                                     <!-- Career Service Fields -->
                                     <div class="col-md-4 mb-2">
                                         <label>31. Special Skills & Hobbies:</label>
-                                        <input type="text" name="skills[]" class="form-control" placeholder="Enter Special Skills & Hobbies">
+                                        <input type="text" name="skills[]" class="form-control" value="<?= htmlspecialchars($other_info['skills']) ?>" placeholder="Enter Special Skills & Hobbies">
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label>32. Non-Academic Distinctions/Recognition:</label>
-                                        <input type="text" name="non_academic[]" class="form-control" placeholder="Write in full">
+                                        <input type="text" name="non_academic[]" class="form-control" value="<?= htmlspecialchars($other_info['non_academic']) ?>" placeholder="Write in full">
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label>33. Membership in Association/Organization:</label>
-                                        <input type="text" name="membership[]" class="form-control" placeholder="Write in full">
+                                        <input type="text" name="membership[]" class="form-control" value="<?= htmlspecialchars($other_info['membership']) ?>" placeholder="Write in full">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>34. Are you related by consanguinity or affinity to the appointing or recommending authority, or to the chief of bureau or to the person who has immediate supervision over you in the Office, Bureau, or Department where you will be appointed, a. within the third degree?</label>
-                                <input type="text" name="if_third" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_third" class="form-control" value="<?= htmlspecialchars($other_info['if_third']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>b. within the fourth degree (for Local Government Unit-Career Employee)?</label>
-                                <input type="text" name="if_fourth" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_fourth" class="form-control" value="<?= htmlspecialchars($other_info['if_fourth']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>35. a. Have you been found guilty of any administrative offense?</label>
-                                <input type="text" name="if_guilty" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_guilty" class="form-control" value="<?= htmlspecialchars($other_info['if_guilty']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>b. Have you been criminally charged before any court?</label>
-                                <input type="text" name="if_criminal" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_criminal" class="form-control" value="<?= htmlspecialchars($other_info['if_criminal']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>36. Have you ever been convicted of any violation of any law, decree, ordinance or regulation by any court or tribunal?</label>
-                                <input type="text" name="if_convicted" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_convicted" class="form-control" value="<?= htmlspecialchars($other_info['if_convicted']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>37. Have you ever been separated from the service in any of the following modes: resignation, retirement, dropped from the rolls, dismissal, termination, end of term, finished contract or phased out (abolition) in the public or private sector?</label>
-                                <input type="text" name="if_separated" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_separated" class="form-control" value="<?= htmlspecialchars($other_info['if_separated']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>38. a. Have you been a candidate in a national or local election held within the last year (except Barangay election)?</label>
-                                <input type="text" name="if_candidate" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_candidate" class="form-control" value="<?= htmlspecialchars($other_info['if_candidate']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>b. Have you resigned from the government service during the three (3)-month period before the last election to promote/actively campaign for a national or local candidate?</label>
-                                <input type="text" name="if_resigned" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_resigned" class="form-control" value="<?= htmlspecialchars($other_info['if_resigned']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>39. Have you acquired the status of an immigrant or permanent resident of another country?</label>
-                                <input type="text" name="if_immigrant" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_immigrant" class="form-control" value="<?= htmlspecialchars($other_info['if_immigrant']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <label>40. Pursuant to: (a) Indigenous People's Act (RA 8371); (b) Magna Carta for Disabled Persons (RA 7277) and (c) Solo Parents Welfare Act of 2000 (RA 8972), please answer the following items: a. Are you a member of any indigenous group?</label>
-                                <input type="text" name="if_indigenous" class="form-control" placeholder="(if yes, give the details.)">
+                                <input type="text" name="if_indigenous" class="form-control" value="<?= htmlspecialchars($other_info['if_indigenous']) ?>" placeholder="(if yes, give the details.)">
                             </div>
 
                             <label>41. REFERENCES (Person not related by consanguinity or affinity to applicant/appointee)</label>
@@ -119,132 +146,62 @@ require_once './config/conn.php';
                                 <!-- Reference Fields -->
                                 <div class="col-md-4 mb-2">
                                     <label>NAME:</label>
-                                    <input type="text" name="ref_nameq" class="form-control" placeholder="Enter Name">
+                                    <input type="text" name="ref_nameq" class="form-control" value="<?= htmlspecialchars($other_info['ref_nameq']) ?>" placeholder="Enter Name">
                                 </div>
                                 <div class="col-md-4 mb-2">
                                     <label>ADDRESS:</label>
-                                    <input type="text" name="ref_add1" class="form-control" placeholder="Write in full">
+                                    <input type="text" name="ref_add1" class="form-control" value="<?= htmlspecialchars($other_info['ref_add1']) ?>" placeholder="Write in full">
                                 </div>
                                 <div class="col-md-4 mb-2">
                                     <label>TEL. NO.:</label>
-                                    <input type="text" name="ref_tel1" class="form-control" placeholder="Provide number">
+                                    <input type="text" name="ref_tel1" class="form-control" value="<?= htmlspecialchars($other_info['ref_tel1']) ?>" placeholder="Provide number">
                                 </div>
                                 <div class="col-md-4 mb-2">
                                     <label>NAME:</label>
-                                    <input type="text" name="ref_name2" class="form-control" placeholder="Enter Name">
+                                    <input type="text" name="ref_name2" class="form-control" value="<?= htmlspecialchars($other_info['ref_name2']) ?>" placeholder="Enter Name">
                                 </div>
                                 <div class="col-md-4 mb-2">
                                     <label>ADDRESS:</label>
-                                    <input type="text" name="ref_add2" class="form-control" placeholder="Write in full">
+                                    <input type="text" name="ref_add2" class="form-control" value="<?= htmlspecialchars($other_info['ref_add2']) ?>" placeholder="Write in full">
                                 </div>
                                 <div class="col-md-4 mb-2">
                                     <label>TEL. NO.:</label>
-                                    <input type="text" name="ref_tel2" class="form-control" placeholder="Provide number">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label>NAME:</label>
-                                    <input type="text" name="ref_name3" class="form-control" placeholder="Enter Name">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label>ADDRESS:</label>
-                                    <input type="text" name="ref_add3s" class="form-control" placeholder="Write in full">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label>TEL. NO.:</label>
-                                    <input type="text" name="ref_tel3" class="form-control" placeholder="Provide number">
+                                    <input type="text" name="ref_tel2" class="form-control" value="<?= htmlspecialchars($other_info['ref_tel2']) ?>" placeholder="Provide number">
                                 </div>
                             </div>
-
                             <label>42. I declare under oath I have personally accomplished this Personal Data Sheet which is a true, correct and complete statement pursuant to the provisions of pertinent laws, rules and regulations of the Republic of the Philippines...</label>
-                            <div class="row">
-                                <div class="col-md-4 mb-2">
-                                    <label>Government ID:</label>
-                                    <input type="text" name="gov_id" class="form-control" placeholder="Government ID">
+                                <div class="row">
+                                    <div class="col-md-4 mb-2">
+                                        <label>Government ID:</label>
+                                        <input type="text" name="gov_id" class="form-control" placeholder="Government ID" value="<?= htmlspecialchars($other_info['gov_id']) ?>">
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <label>Passport or License ID:</label>
+                                        <input type="text" name="passport_id" class="form-control" placeholder="License or Passport ID" value="<?= htmlspecialchars($other_info['passport_id']) ?>">
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <label>Date of Issuance:</label>
+                                        <input type="date" name="insure_date" class="form-control" value="<?= htmlspecialchars($other_info['insure_date']) ?>">
+                                    </div>
                                 </div>
-                                <div class="col-md-4 mb-2">
-                                    <label>Passport or License ID:</label>
-                                    <input type="text" name="passport_id" class="form-control" placeholder="License or Passport ID">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label>Date of Issuance:</label>
-                                    <input type="date" name="insure_date" class="form-control">
-                                </div>
+
+
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
 
-                            <!-- Add/Remove Buttons -->
-                            <div class="col-md-12 mb-2 text-right">
-                                <button type="button" id="add-field" class="btn btn-success">Add Another</button>
-                                <button type="button" id="remove-field" class="btn btn-danger" style="display:none;">Remove</button>
-                            </div>
-
-                            <!-- Submission Buttons -->
-                            <div class="col-12 text-right mt-3">
-                                <button type="submit" class="btn btn-primary">Update </button>
-                              
-                            </div>
                         </div>
                     </form>
-
-
-
                     </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- Footer -->
-    <?php include './util/footer.php'; ?>
-
 </div>
-
-<!-- Scripts -->
+<!-- AdminLTE JS -->
 <script src="vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
-<script src="./assets/js/script.js"></script>
-<script>
-    // Add and remove fields functionality
-    const addButton = document.getElementById('add-field');
-    const removeButton = document.getElementById('remove-field');
-    const container = document.getElementById('input-fields-container');
-
-    addButton.addEventListener('click', function() {
-        // Clone the existing input fields and append them
-        const newFields = container.children[0].cloneNode(true);
-        container.appendChild(newFields);
-
-        // Show remove button when there's more than one set of fields
-        if (container.children.length > 1) {
-            removeButton.style.display = 'inline-block';
-        }
-    });
-
-    removeButton.addEventListener('click', function() {
-        if (container.children.length > 1) {
-            // Remove the last set of fields
-            container.removeChild(container.lastElementChild);
-        }
-
-        // Hide remove button if only one set of fields remains
-        if (container.children.length === 1) {
-            removeButton.style.display = 'none';
-        }
-    });
-
-    // Toggle visibility of text input based on radio button selection
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', function () {
-            let textInput = this.closest('div').querySelector('input[type="text"]');
-            if (this.value === 'yes') {
-                textInput.style.display = 'block';  
-            } else {
-                textInput.style.display = 'none';  
-            }
-        });
-    });
-</script>
-
-
 </body>
 </html>

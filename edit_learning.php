@@ -5,6 +5,32 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 require_once './config/conn.php';
+require './util/encrypt_helper.php';
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
+    $learning_development_id = decrypt_id($token);
+    
+    $query = "
+            SELECT *
+            FROM learning_development
+            WHERE id = ?";
+
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $learning_development_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $learning_development = $result->fetch_assoc();
+        } else {
+            echo "No record Found.";
+            exit();
+        }
+        $stmt->close();
+    } else {
+        die("Error preparing statement: " . $conn->error);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,12 +64,13 @@ require_once './config/conn.php';
                         </h3>
                     </div>
                     <div class="card-body">
-                    <form action="PDS/insert_learning.php" method="POST">
+                    <form action="PDS/update_learning.php" method="POST">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($learning_development['id']) ?>">
                         <div class="row">
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required>
+                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required value="<?= htmlspecialchars($learning_development['employee_no']) ?>">
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
@@ -51,35 +78,35 @@ require_once './config/conn.php';
                                     <!-- Career Service Fields -->
                                     <div class="col-md-12 mb-2">
                                         <label>30. Title Of Learning and Development Interventions/Training Programs (Write in full):</label>
-                                        <input type="text" name="title[]" class="form-control" placeholder=" (Write in full)">
+                                        <input type="text" name="title[]" class="form-control" placeholder=" (Write in full)" value="<?= htmlspecialchars($learning_development['title']) ?>">
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label>Inclusive Dates of Attendance:</label>
                                         <label>From</label>
-                                        <input type="date" name="attFrom_date[]" class="form-control" required>
+                                        <input type="date" name="from_date[]" class="form-control" required value="<?= htmlspecialchars($learning_development['from_date']) ?>">
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label>To</label>
-                                        <input type="date" name="attTo_date[]" class="form-control" required>
+                                        <input type="date" name="to_date[]" class="form-control" required value="<?= htmlspecialchars($learning_development['to_date']) ?>">
                                     </div>
 
                                     <div class="col-md-4 mb-2">
                                         <label>Number of Hours:</label>
-                                        <input type="number" name="hours[]" class="form-control" placeholder="Number of Hours" required>
+                                        <input type="number" name="hours[]" class="form-control" placeholder="Number of Hours" required value="<?= htmlspecialchars($learning_development['hours']) ?>">
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label>Type of I.D:</label>
                                         <select name="citizenship" class="form-control" required>
                                             <option value="" selected disabled>Select I.D</option>
-                                            <option value="Managerial">Managerial</option>
-                                            <option value="Supervisory">Supervisory</option>
-                                            <option value="Technical">Technical</option>
-                                            <option value="other">Other</option>
+                                            <option value="Managerial" <?= $learning_development['citizenship_type'] == 'Managerial' ? 'selected' : '' ?>>Managerial</option>
+                                            <option value="Supervisory" <?= $learning_development['citizenship_type'] == 'Supervisory' ? 'selected' : '' ?>>Supervisory</option>
+                                            <option value="Technical" <?= $learning_development['citizenship_type'] == 'Technical' ? 'selected' : '' ?>>Technical</option>
+                                            <option value="other" <?= $learning_development['citizenship_type'] == 'other' ? 'selected' : '' ?>>Other</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label>Conducted:</label>
-                                        <input type="text" name="conducted[]" class="form-control" placeholder="Sponsored By (Write in full)" required>
+                                        <input type="text" name="conducted_by[]" class="form-control" placeholder="Sponsored By (Write in full)" required value="<?= htmlspecialchars($learning_development['conducted_by']) ?>">
                                     </div>
                                 </div>
                             </div>
@@ -92,11 +119,10 @@ require_once './config/conn.php';
 
                             <!-- Submission Buttons -->
                             <div class="col-12 text-right mt-3">
-                                 <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </div>
                     </form>
-
 
                     </div>
                 </div>
