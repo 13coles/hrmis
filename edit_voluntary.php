@@ -24,6 +24,7 @@ if (isset($_GET['token'])) {
             $voluntary_work = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: voluntary.php");
             exit();
         }
         $stmt->close();
@@ -71,7 +72,7 @@ if (isset($_GET['token'])) {
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required value="<?= htmlspecialchars($voluntary_work['employee_no']) ?>">
+                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required value="<?= htmlspecialchars($voluntary_work['employee_no']) ?>" readonly>
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
@@ -79,25 +80,25 @@ if (isset($_GET['token'])) {
                                     <!-- Voluntary Work Fields -->
                                     <div class="col-md-6 mb-2">
                                         <label>29. Name & Address Of Organization:</label>
-                                        <input type="text" name="org_name[]" class="form-control" placeholder=" (Write in full)" required>
+                                        <input type="text" name="org_name[]" class="form-control" placeholder=" (Write in full)" required value="<?= htmlspecialchars($voluntary_work['org_name'] ?? '') ?>">
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label>Inclusive Date</label>
                                         <label>From</label>
-                                        <input type="date" name="from_date[]" class="form-control" required>
+                                        <input type="date" name="from_date[]" class="form-control" required value="<?= htmlspecialchars($voluntary_work['from_date'] ?? '') ?>">
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label>To</label>
-                                        <input type="date" name="to_date[]" class="form-control" required>
+                                        <input type="date" name="to_date[]" class="form-control" required value="<?= htmlspecialchars($voluntary_work['to_date'] ?? '') ?>">
                                     </div>
 
                                     <div class="col-md-3 mb-2">
                                         <label>Number of Hours:</label>
-                                        <input type="number" name="hours[]" class="form-control" placeholder="Number of Hours" required>
+                                        <input type="number" name="hours[]" class="form-control" placeholder="Number of Hours" required value="<?= htmlspecialchars($voluntary_work['hours'] ?? '') ?>">
                                     </div>
                                     <div class="col-md-3 mb-2">
                                         <label>Position/Nature Work:</label>
-                                        <input type="text" name="nature_of_work[]" class="form-control" placeholder="Position/Nature Work" required>
+                                        <input type="text" name="nature_of_work[]" class="form-control" placeholder="Position/Nature Work" required value="<?= htmlspecialchars($voluntary_work['nature_of_work'] ?? '') ?>">
                                     </div>
                                 </div>
                             </div>

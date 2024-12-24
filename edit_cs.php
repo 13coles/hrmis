@@ -27,6 +27,7 @@ if (isset($_GET['token'])) {
             $civil_service_eligibility = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: civil_service.php");
             exit();
         }
         $stmt->close();
@@ -73,7 +74,7 @@ if (isset($_GET['token'])) {
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" value="<?= htmlspecialchars($civil_service_eligibility['employee_no']) ?>" required>
+                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" value="<?= htmlspecialchars($civil_service_eligibility['employee_no']) ?>" readonly>
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">

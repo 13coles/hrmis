@@ -175,16 +175,14 @@ exit();
                     <tr><td><strong>Blood Type</strong></td><td><?= htmlspecialchars($employee_info['bloodtype'] ?? '') ?></td></tr>
                     <tr><td><strong>Height</strong></td><td><?= htmlspecialchars($employee_info['height'] ?? '') ?></td></tr>
                     <tr><td><strong>Weight</strong></td><td><?= htmlspecialchars($employee_info['weight'] ?? '') ?></td></tr>
-                    <tr><td><strong>Citizenship</strong></td><td><?= htmlspecialchars($employee_info['citezenship'] ?? '') ?></td></tr>
+                    <tr><td><strong>Citizenship</strong></td><td><?= htmlspecialchars($employee_info['citizenship'] ?? '') ?></td></tr>
                     <tr><td><strong>Permanent Address</strong></td><td>
                     <?= htmlspecialchars(trim(($employee_info['permaAdd'] ?? '') . ' ' . ($employee_info['permastreet'] ?? '') . ' ' . ($employee_info['permaSub'] ?? '') . ' ' . ($employee_info['permaBarangay'] ?? '') . ' ' . ($employee_info['permaCity']) . ' ' . ($employee_info['permaProvince']) . ' ' . ($employee_info['permaZip']))) ?>
                     </td></tr>
                     <tr><td><strong>Redential Address</strong></td><td>
                     <?= htmlspecialchars(trim(($employee_info['resAdd'] ?? '') . ' ' . ($employee_info['street'] ?? '') . ' ' . ($employee_info['subdivision'] ?? '') . ' ' . ($employee_info['barangay'] ?? '') . ' ' . ($employee_info['city']) . ' ' . ($employee_info['province']) . ' ' . ($employee_info['zipcode']))) ?>
                     </td></tr>
-                    <tr><td><strong>Tel No</strong></td><td><?= htmlspecialchars($employee_info['telno'] ?? '') ?></td></tr>
-                    <tr><td><strong>Mobile NO</strong></td><td><?= htmlspecialchars($employee_info['mobileno'] ?? '') ?></td></tr>
-                    <tr><td><strong>Email</strong></td><td><?= htmlspecialchars($employee_info['email'] ?? '') ?></td></tr>
+                   
                     
                 </tbody>
             </table>
@@ -309,7 +307,7 @@ exit();
                 <tbody>
                     <tr><td><strong>Title of Learning Development Intervention Program</strong></td><td><?= htmlspecialchars($learning_development['title'] ?? '') ?></td></tr>
                     <tr><td><strong>Inclusive Date</strong></td><td><?= htmlspecialchars($learning_development['from_date'] ?? '') ?> - <?= htmlspecialchars($learning_development['to_date'] ?? '') ?></td></tr>
-                    <tr><td><strong>Type of ID</strong></td><td><?= htmlspecialchars($learning_development['citezenship_type'] ?? '') ?></td></tr>
+                    <tr><td><strong>Type of ID</strong></td><td><?= htmlspecialchars($learning_development['citizenship_type'] ?? '') ?></td></tr>
                     <tr><td><strong>Conducted / Sponsored by</strong></td><td><?= htmlspecialchars($learning_development['conducted_by'] ?? '') ?></td></tr>
                 </tbody>
             </table>

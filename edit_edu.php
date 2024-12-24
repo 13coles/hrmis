@@ -27,6 +27,7 @@ if (isset($_GET['token'])) {
             $educational_background = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: educational.php");
             exit();
         }
         $stmt->close();

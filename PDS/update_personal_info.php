@@ -13,6 +13,7 @@ function sanitizeInput($data) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect data
+    $id = $_POST['id']; 
     $employee_no = sanitizeInput($_POST['employee_no']);
     $csc = sanitizeInput($_POST['csc']);
     $sname = sanitizeInput($_POST['sname']);
@@ -50,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telno = sanitizeInput($_POST['telno']);
     $mobileno = sanitizeInput($_POST['mobileno']);
     $email = sanitizeInput($_POST['email']);
-    $personal_info_id = sanitizeInput($_POST['id']); 
+   
 
     // Update query
     $query = "UPDATE personal_info SET
@@ -99,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $employee_no, $csc, $sname, $fname, $mname, $extension, $datebirth, $placebirth, $sex, $status, $height, $weight, $bloodtype,
         $gsis_id, $pagibig_id, $philhealth_id, $sss_id, $tin_id, $citizenship, $country, $resAdd, $street, $subdivision,
         $barangay, $city, $province, $zipcode, $permaAdd, $permaStreet, $permaSub, $permaBarangay, $permaCity, $permaProvince,
-        $permaZip, $telno, $mobileno, $email, $personal_info_id
+        $permaZip, $telno, $mobileno, $email, $id
     );
 
     // Execution and feedback
@@ -111,10 +112,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
     $conn->close();
-
-    // Redirect back to the referring page
-    $redirect_url = $_SERVER['HTTP_REFERER'] ?? '../view_personalInfo.php';
-    header("Location: $redirect_url");
+    $token = encrypt_id($employee_no);
+    header("Location: ../viewjo_pds.php?token=$token");
+ 
     exit();
 }
 ?>

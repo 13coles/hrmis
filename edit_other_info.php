@@ -24,6 +24,7 @@ if (isset($_GET['token'])) {
             $other_info = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: other.php");
             exit();
         }
         $stmt->close();

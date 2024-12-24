@@ -25,6 +25,7 @@ if (isset($_GET['token'])) {
             $work_experience = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: work_exp.php");
             exit();
         }
         $stmt->close();
@@ -71,7 +72,7 @@ if (isset($_GET['token'])) {
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" value="<?= htmlspecialchars($work_experience['employee_no']) ?>" placeholder="Agency Employee Number" required>
+                                <input type="text" name="employee_no" class="form-control" value="<?= htmlspecialchars($work_experience['employee_no']) ?>" placeholder="Agency Employee Number" readonly>
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
@@ -109,11 +110,11 @@ if (isset($_GET['token'])) {
                                     <div class="col-md-3 mt-2">
                                         <label>Gov't Service:</label>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="gov[]" class="form-check-input" id="gov_yes" value="yes" <?= $work_experience['gov_service'] == 'yes' ? 'checked' : '' ?> required>
+                                            <input type="radio" name="gov_service[]" class="form-check-input" id="gov_yes" value="yes" <?= $work_experience['gov_service'] == 'yes' ? 'checked' : '' ?> required>
                                             <label class="form-check-label" for="gov_yes">Yes</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="gov[]" class="form-check-input" id="gov_no" value="no" <?= $work_experience['gov_service'] == 'no' ? 'checked' : '' ?> required>
+                                            <input type="radio" name="gov_service[]" class="form-check-input" id="gov_no" value="no" <?= $work_experience['gov_service'] == 'no' ? 'checked' : '' ?> required>
                                             <label class="form-check-label" for="gov_no">No</label>
                                         </div>
                                     </div>

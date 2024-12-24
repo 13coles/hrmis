@@ -24,6 +24,7 @@ if (isset($_GET['token'])) {
             $personal_info = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: personal_info.php");
             exit();
         }
         $stmt->close();
@@ -66,7 +67,7 @@ if (isset($_GET['token'])) {
                         <h3 class="card-title"> Edit Personal Information</h3>
                     </div>
                     <div class="card-body">
-                    <form action="PDS/update_fami.php" method="POST">
+                    <form action="PDS/update_personal_info.php" method="POST">
                         <input type="hidden" name="id" value="<?= htmlspecialchars($personal_info['id']) ?>">
                         <div class="row">
                             <!-- Employee Details -->
@@ -95,10 +96,11 @@ if (isset($_GET['token'])) {
                             <div class="col-md-3 mb-2">
                                 <label>Name Extension:</label>
                                 <select name="extension" class="form-control">
-                                    <option value=""></option>
-                                    <option value="Jr.">Jr.</option>
-                                    <option value="Sr.">Sr.</option>
+                                    <option value="" <?= empty($personal_info['extension']) ? 'selected' : '' ?>></option>
+                                    <option value="Jr." <?= isset($personal_info['extension']) && $personal_info['extension'] == 'Jr.' ? 'selected' : '' ?>>Jr.</option>
+                                    <option value="Sr." <?= isset($personal_info['extension']) && $personal_info['extension'] == 'Sr.' ? 'selected' : '' ?>>Sr.</option>
                                 </select>
+
                             </div>
 
                             <!-- Birth Details -->
@@ -113,9 +115,9 @@ if (isset($_GET['token'])) {
                             <div class="col-md-4 mb-2">
                                 <label>6. Sex:</label>
                                 <select name="sex" class="form-control">
-                                    <option value=""><?= htmlspecialchars($personal_info['sex']) ?></option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
+                                    <option value="" disabled selected>Select Sex</option>
+                                    <option value="Male" <?= isset($personal_info['sex']) && $personal_info['sex'] == 'Male' ? 'selected' : '' ?>>Male</option>
+                                    <option value="Female" <?= isset($personal_info['sex']) && $personal_info['sex'] == 'Female' ? 'selected' : '' ?>>Female</option>
                                 </select>
                             </div>
 
@@ -123,12 +125,12 @@ if (isset($_GET['token'])) {
                             <div class="col-md-4 mb-2">
                                 <label>7. Civil Status:</label>
                                 <select name="status" class="form-control">
-                                    <option value=""> <?= htmlspecialchars($personal_info['status']) ?></option>
-                                    <option value="Single">Single</option>
-                                    <option value="Married">Married</option>
-                                    <option value="Widowed">Widowed</option>
-                                    <option value="Separated">Separated</option>
-                                    <option value="Other">Other/s</option>
+                                    <option value="" disabled selected>Select Civil Status</option>
+                                    <option value="Single" <?= isset($personal_info['status']) && $personal_info['status'] == 'Single' ? 'selected' : '' ?>>Single</option>
+                                    <option value="Married" <?= isset($personal_info['status']) && $personal_info['status'] == 'Married' ? 'selected' : '' ?>>Married</option>
+                                    <option value="Widowed" <?= isset($personal_info['status']) && $personal_info['status'] == 'Widowed' ? 'selected' : '' ?>>Widowed</option>
+                                    <option value="Separated" <?= isset($personal_info['status']) && $personal_info['status'] == 'Separated' ? 'selected' : '' ?>>Separated</option>
+                                    <option value="Other" <?= isset($personal_info['status']) && $personal_info['status'] == 'Other' ? 'selected' : '' ?>>Other/s</option>
                                 </select>
                             </div>
 
@@ -172,12 +174,13 @@ if (isset($_GET['token'])) {
                             <div class="col-md-4 mb-2">
                                 <label>16. Citizenship:</label>
                                 <select name="citizenship" class="form-control">
-                                    <option value=""><?= htmlspecialchars($personal_info['citizenship']) ?></option>
-                                    <option value="Filipino">Filipino</option>
-                                    <option value="Dual Citizenship">Dual Citizenship</option>
-                                    <option value="By Birth">By Birth</option>
-                                    <option value="By Naturalization">By Naturalization</option>
+                                    <option value="" disabled selected>Select Citizenship</option>
+                                    <option value="Filipino" <?= isset($personal_info['citizenship']) && $personal_info['citizenship'] == 'Filipino' ? 'selected' : '' ?>>Filipino</option>
+                                    <option value="Dual Citizenship" <?= isset($personal_info['citizenship']) && $personal_info['citizenship'] == 'Dual Citizenship' ? 'selected' : '' ?>>Dual Citizenship</option>
+                                    <option value="By Birth" <?= isset($personal_info['citizenship']) && $personal_info['citizenship'] == 'By Birth' ? 'selected' : '' ?>>By Birth</option>
+                                    <option value="By Naturalization" <?= isset($personal_info['citizenship']) && $personal_info['citizenship'] == 'By Naturalization' ? 'selected' : '' ?>>By Naturalization</option>
                                 </select>
+
                             </div>
                             <div class="col-md-4 mb-2">
                                 <label>Country:</label>

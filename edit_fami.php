@@ -24,6 +24,7 @@ if (isset($_GET['token'])) {
             $family_info = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: famb.php");
             exit();
         }
         $stmt->close();

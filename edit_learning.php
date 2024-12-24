@@ -24,6 +24,7 @@ if (isset($_GET['token'])) {
             $learning_development = $result->fetch_assoc();
         } else {
             echo "No record Found.";
+            header("Location: learning.php");
             exit();
         }
         $stmt->close();
@@ -70,7 +71,7 @@ if (isset($_GET['token'])) {
                             <!-- Employee Details -->
                             <div class="col-md-12 mb-2">
                                 <label>Employee No:</label>
-                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required value="<?= htmlspecialchars($learning_development['employee_no']) ?>">
+                                <input type="text" name="employee_no" class="form-control" placeholder="Agency Employee Number" required value="<?= htmlspecialchars($learning_development['employee_no']) ?>" readonly>
                             </div>
 
                             <div class="col-md-12 mb-4" id="input-fields-container">
@@ -96,13 +97,15 @@ if (isset($_GET['token'])) {
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label>Type of I.D:</label>
-                                        <select name="citizenship" class="form-control" required>
-                                            <option value="" selected disabled>Select I.D</option>
-                                            <option value="Managerial" <?= $learning_development['citizenship_type'] == 'Managerial' ? 'selected' : '' ?>>Managerial</option>
-                                            <option value="Supervisory" <?= $learning_development['citizenship_type'] == 'Supervisory' ? 'selected' : '' ?>>Supervisory</option>
-                                            <option value="Technical" <?= $learning_development['citizenship_type'] == 'Technical' ? 'selected' : '' ?>>Technical</option>
-                                            <option value="other" <?= $learning_development['citizenship_type'] == 'other' ? 'selected' : '' ?>>Other</option>
+                                        <select name="citizenship_type[]" class="form-control" required>
+                                            <option ><?= htmlspecialchars($learning_development['citizenship_type']) ?></option>
+                                            <option value="Managerial">Managerial</option>
+                                            <option value="Supervisory">Supervisory</option>
+                                            <option value="Technical">Technical</option>
+                                            <option value="By Birth">By Birth</option>
+                                            <option value="Other">Other</option>
                                         </select>
+
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label>Conducted:</label>

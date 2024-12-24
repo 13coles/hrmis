@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $from_dates = $_POST['from_date'];
     $to_dates = $_POST['to_date'];
     $hours = $_POST['hours'];
-    $citizenship_types = $_POST['citizenship_type'];
+    $citizenship_type = $_POST['citizenship_type'];
     $conducted_bys = $_POST['conducted_by'];
 
    
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $from_date = $from_dates[$index];
             $to_date = $to_dates[$index];
             $hour = $hours[$index];
-            $citizenship_type = $citizenship_types[$index];
+            $citizenship_type = $citizenship_type[$index];
             $conducted_by = $conducted_bys[$index];
 
            
