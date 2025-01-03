@@ -31,6 +31,7 @@ if (!isset($_SESSION['user_id'])) {
 
         <section class="content">
             <div class="container-fluid">
+            <?php include './util/session-message.php'?>
                <div class="row">
                     <div class="col-lg-12">
                         <form action="forms/insert_jo.php" method="post">
