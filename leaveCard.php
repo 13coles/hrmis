@@ -1,12 +1,15 @@
 <?php
+//change
 session_start();
 require_once './config/conn.php';
 require './util/encrypt_helper.php';
+require 'autoAdd.php';
 
-// Check if form data is submitted
-if (isset($_GET['token'])) {
-    $token = $_GET['token'];
-    $employee_id = decrypt_id($token);
+// Call the leave credit insertion function
+insertMonthlyLeaveCredits($conn);
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id']; 
 
     // Fetch employee details
     $employeeQuery = $conn->prepare("
@@ -19,7 +22,7 @@ if (isset($_GET['token'])) {
         FROM employees 
         WHERE id = ?
     ");
-    $employeeQuery->bind_param("i", $employee_id);
+    $employeeQuery->bind_param("i", $id);
     $employeeQuery->execute();
     $employeeResult = $employeeQuery->get_result();
     
@@ -33,6 +36,7 @@ if (isset($_GET['token'])) {
     // Fetch all leave card records for the employee
     $leaveCardQuery = $conn->prepare("
         SELECT 
+            id,
             year, 
             le_vac, 
             le_sck,
@@ -51,7 +55,7 @@ if (isset($_GET['token'])) {
         WHERE employee_id = ? 
         ORDER BY year ASC, id ASC
     ");
-    $leaveCardQuery->bind_param("i", $employee_id);
+    $leaveCardQuery->bind_param("i", $id);
     $leaveCardQuery->execute();
     $leaveCardResult = $leaveCardQuery->get_result();
 } else {
@@ -59,15 +63,12 @@ if (isset($_GET['token'])) {
     exit;
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leave Card</title>
-    <!-- Admin LTE CSS -->
     <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -93,7 +94,7 @@ if (isset($_GET['token'])) {
                              <div class="card-header">
                                 <div class="row p-2 bg-primary"> 
                                     <div class="col">
-                                        <strong class="h6">Employee Name:</strong> <span class="h6"><?= htmlspecialchars($employee['name']) ?></span>
+                                        <strong class="h6">Name:</strong> <span class="h6"><?= htmlspecialchars($employee['name']) ?></span>
                                     </div>
                                     <div class="col">
                                         <strong class="h6">Sex:</strong> <span class="h6"><?= htmlspecialchars($employee['sex']) ?></span>
@@ -135,6 +136,7 @@ if (isset($_GET['token'])) {
                                             <th colspan="2">Undertime</th>
                                             <th colspan="2">Balance</th>
                                             <th colspan="2">Processor</th>
+                                            <th rowspan="2">Action</th>
                                         </tr>
                                         <tr>
                                             <th>Vacation</th>
@@ -173,6 +175,9 @@ if (isset($_GET['token'])) {
                                                 <td><?= htmlspecialchars($card['b_sck']) ?></td>
                                                 <td><?= htmlspecialchars($card['p_initial']) ?></td>
                                                 <td><?= htmlspecialchars($card['p_date']) ?></td>
+                                                <td>
+                                                    <a href="edit_leave_card.php?id=<?= $card['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
+                                                </td> 
                                             </tr>
                                             <?php endwhile; ?>
                                         <?php endif; ?>

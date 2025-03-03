@@ -1,34 +1,71 @@
 <?php
+// this was change
 session_start();
 require_once './config/conn.php';
-
-// Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
-
-// Initialize variables
 $employee = null;
 $error_message = "";
 
-// Check if 'employee_no' is provided in the URL
-if (isset($_GET['employee_no'])) {
-    $employee_no = $_GET['employee_no'];
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['employee_id'])) {
+    $employee_id = $_GET['employee_id'];
+    $query = "SELECT 
+                a.id,
+                a.employee_id,
+                e.employee_no,
+                e.first_name, 
+                e.middle_name, 
+                e.last_name, 
+                e.extension_name,
+                e.department_name,
+                e.position,
+                e.salary_grade,
+                a.dateofFilling,
+                a.typeofLeave,
+                a.others,
+                a.vacationleave,
+                a.sickleave,
+                a.specialleave,
+                a.studyleave,
+                a.otherpurpose,
+                a.numberofWork,
+                a.inclusiveDate_from,
+                a.inclusiveDate_to,
+                a.commutation,
+                a.certificationofLeave,
+                a.vacationTotal,
+                a.vacationLess,
+                a.vacationBalance,
+                a.sickTotal,
+                a.sickLess,
+                a.sickBalance,
+                a.recommendation,
+                a.forDisapproval,
+                a.approved,
+                a.disapproved
+            FROM appleave a
+            INNER JOIN employees e ON a.employee_id = e.id
+            WHERE a.employee_id = ?";
 
-    // Fetch the employee record
-    $stmt = $conn->prepare("SELECT * FROM appleave WHERE employee_no = ?");
-    $stmt->bind_param("s", $employee_no);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($stmt = mysqli_prepare($conn, $query)) {
+        mysqli_stmt_bind_param($stmt, "i", $employee_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
-    if ($result && $result->num_rows > 0) {
-        $employee = $result->fetch_assoc();
+        if ($result && mysqli_num_rows($result) > 0) {
+            $employee = mysqli_fetch_assoc($result);
+        } else {
+            $error_message = "No record found for Employee ID: " . htmlspecialchars($employee_id);
+        }
+
+        mysqli_stmt_close($stmt);
     } else {
-        $error_message = "No record found for Employee No: " . htmlspecialchars($employee_no);
+        $error_message = "Query failed: " . mysqli_error($conn);
     }
 } else {
-    $error_message = "Employee No is missing from the URL.";
+    $error_message = "Invalid request.";
 }
 ?>
 <!DOCTYPE html>
@@ -111,19 +148,19 @@ if (isset($_GET['employee_no'])) {
     </tr>
     <tr>
         <th>Office/Department-District/School:</th>
-        <td><input type="text" name="office" class="form-control" placeholder="Enter Office" value="<?php echo htmlspecialchars($employee['office']); ?>"></td>
+        <td><input type="text" name="department_name" class="form-control" placeholder="Enter Office" value="<?php echo htmlspecialchars($employee['department_name']); ?>"></td>
     </tr>
     <tr>
         <th>Last Name:</th>
-        <td><input type="text" name="lastname" class="form-control" required placeholder="Enter Last Name" value="<?php echo htmlspecialchars($employee['lastname']); ?>"></td>
+        <td><input type="text" name="last_name" class="form-control" required placeholder="Enter Last Name" value="<?php echo htmlspecialchars($employee['last_name']); ?>"></td>
     </tr>
     <tr>
         <th>First Name:</th>
-        <td><input type="text" name="firstname" class="form-control" placeholder="Enter First Name" value="<?php echo htmlspecialchars($employee['firstname']); ?>"></td>
+        <td><input type="text" name="first_name" class="form-control" placeholder="Enter First Name" value="<?php echo htmlspecialchars($employee['first_name']); ?>"></td>
     </tr>
     <tr>
         <th>Middle Name:</th>
-        <td><input type="text" name="middlename" class="form-control" placeholder="Enter Middle Name" value="<?php echo htmlspecialchars($employee['middlename']); ?>"></td>
+        <td><input type="text" name="middle_name" class="form-control" placeholder="Enter Middle Name" value="<?php echo htmlspecialchars($employee['middle_name']); ?>"></td>
     </tr>
     <tr>
         <th>Position:</th>
@@ -131,7 +168,7 @@ if (isset($_GET['employee_no'])) {
     </tr>
     <tr>
         <th>Salary:</th>
-        <td><input type="text" name="salary" class="form-control" placeholder="Enter Salary" value="<?php echo htmlspecialchars($employee['salary']); ?>"></td>
+        <td><input type="text" name="salary_grade" class="form-control" placeholder="Enter Salary" value="<?php echo htmlspecialchars($employee['salary_grade']); ?>"></td>
     </tr>
     <tr>
         <th>Date of Filing:</th>

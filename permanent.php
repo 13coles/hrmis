@@ -1,7 +1,6 @@
 <?php 
 session_start();
 require_once './config/conn.php';
-require './util/encrypt_helper.php';
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -120,23 +119,19 @@ $result = mysqli_query($conn, $query);
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <!-- View PDS -->
-                                                <?php $token = encrypt_id($row['employee_no']);?>
-                                                <a href="view_personalInfo.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
+                                                <a href="view_personalInfo.php?employee_no=<?php echo $row['employee_no']; ?>" class="dropdown-item text-sm">
                                                     <i class="fas fa-file-alt text-primary me-2"></i> View PDS
                                                 </a>
 
                                                 <!-- View Card -->
-                                                <?php $token = encrypt_id($row['id']);?>
-                                                <a href="leaveCard.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
-                                                     <i class="fas fa-file-alt text-primary me-2"></i> View Leave Card
+                                                <a href="leaveCard.php?id=<?php echo $row['id']; ?>" class="dropdown-item text-sm">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i> View Leave Card
                                                 </a>
 
-                                                  <!-- View record-->
-                                                <?php $token = encrypt_id($row['id']);?>
-                                                <a href="viewRecord.php?token=<?php echo $token; ?>" class="dropdown-item text-sm">
+                                                <!-- View Record -->
+                                                <a href="viewRecord.php?id=<?php echo $row['id']; ?>" class="dropdown-item text-sm">
                                                     <i class="fas fa-book text-info me-2"></i> View Record
                                                 </a>
-
 
                                                    <!-- View Certificates -->
                                                 <form action="certificates.php" method="POST" class="mb-0">

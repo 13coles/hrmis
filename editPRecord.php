@@ -7,9 +7,8 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once './config/conn.php';
 require './util/encrypt_helper.php';
-if (isset($_GET['token'])) {
-    $token = $_GET['token'];
-    $employee_id= decrypt_id($token);
+if (isset($_GET['employee_id'])) {
+    $employee_id = $_GET['employee_id'];
     
     // Retrieve existing data for employee
     $query = "
@@ -385,10 +384,6 @@ if (isset($_GET['token'])) {
                                         <div class="col-12 text-end">
                                             
                                             <button type="submit" class="btn btn-primary me-2">Update</button>
-                                            <?php $token = encrypt_id($employee['id']);?>
-                                                <a href="viewRecord.php?token=<?php echo $token; ?>" class="btn btn-secondary">
-                                                   Go Back
-                                                </a>
                                             
                                         </div>
                                     </div>

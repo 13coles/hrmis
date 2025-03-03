@@ -1,4 +1,5 @@
 <?php 
+//chnages
 session_start();
 require_once './config/conn.php';
 if (!isset($_SESSION['user_id'])) {
@@ -6,8 +7,17 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Fetch employee records from the database
-$query = "SELECT * FROM appleave";
+$query = "SELECT 
+    e.id,
+    e.employee_no, 
+    TRIM(CONCAT(e.first_name, ' ', COALESCE(e.middle_name, ''), ' ', e.last_name, ' ', COALESCE(e.extension_name, ''))) AS employee_name, 
+    e.department_name, 
+    e.position, 
+    a.typeofLeave, 
+    a.numberofWork
+FROM appleave a
+INNER JOIN employees e ON a.employee_id = e.id;";
+
 $result = mysqli_query($conn, $query);
 
 ?>
@@ -164,8 +174,8 @@ $result = mysqli_query($conn, $query);
                 ?>
                     <tr>
                         <td><?php echo $row['employee_no']; ?></td>
-                        <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
-                        <td><?php echo $row['office']; ?></td>
+                        <td><?php echo $row['employee_name']; ?></td>
+                        <td><?php echo $row['department_name']; ?></td>
                         <td><?php echo $row['position']; ?></td>
                         <td><?php echo $row['typeofLeave']; ?></td>
                         <td><?php echo $row['numberofWork']; ?></td>

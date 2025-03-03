@@ -1,26 +1,58 @@
 <?php 
+//this was change
 session_start();
 require_once './config/conn.php';
-
-// Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Check if the form was submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_no'])) {
-    $employee_no = mysqli_real_escape_string($conn, $_POST['employee_no']);
-    
-    // Fetch employee record from the database using the provided employee_no
-    $query = "SELECT * FROM appleave WHERE employee_no = '$employee_no'";
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['employee_id'])) {
+    $employee_id = mysqli_real_escape_string($conn, $_GET['employee_id']);
+    $query = "SELECT 
+                a.id,
+                a.employee_id,
+                e.employee_no,
+                e.first_name, 
+                e.middle_name, 
+                e.last_name, 
+                e.extension_name,
+                e.department_name,
+                e.position,
+                e.salary_grade,
+                a.dateofFilling,
+                a.typeofLeave,
+                a.others,
+                a.vacationleave,
+                a.sickleave,
+                a.specialleave,
+                a.studyleave,
+                a.otherpurpose,
+                a.numberofWork,
+                a.inclusiveDate_from,
+                a.inclusiveDate_to,
+                a.commutation,
+                a.certificationofLeave,
+                a.vacationTotal,
+                a.vacationLess,
+                a.vacationBalance,
+                a.sickTotal,
+                a.sickLess,
+                a.sickBalance,
+                a.recommendation,
+                a.forDisapproval,
+                a.approved,
+                a.disapproved
+            FROM appleave a
+            INNER JOIN employees e ON a.employee_id = e.id
+            WHERE a.employee_id = '$employee_id'";
+
     $result = mysqli_query($conn, $query);
-    
+
     if ($result && mysqli_num_rows($result) > 0) {
         $employee = mysqli_fetch_assoc($result);
     } else {
-        // If no record is found
-        echo "No record found for Employee No: " . htmlspecialchars($employee_no);
+        echo "No record found for Employee ID: " . htmlspecialchars($employee_id);
         exit();
     }
 } else {
@@ -66,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_no'])) {
                     <div class="card-header">
                     <h4 >Employee Leave Records</h4>
                     <div class="card-tools">
-                        <a href="print-employee-leave.php?employee_no=<?php echo urlencode($employee_no); ?>" class="btn btn-primary btn-md me-2">
+                        <a href="print-employee-leave.php?employee_id=<?php echo urlencode($employee_id); ?>" class="btn btn-primary btn-md me-2">
                             <i class="fas fa-print"></i> Print
                         </a>
 
@@ -86,19 +118,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_no'])) {
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label>Office/Department-District/School:</label>
-                                    <input type="text" name="office" class="form-control" placeholder="Enter Office"  value="<?php echo htmlspecialchars($employee['office']); ?>" >
+                                    <input type="text" name="department_name" class="form-control" placeholder="Enter department_name"  value="<?php echo htmlspecialchars($employee['department_name']); ?>" >
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label>Last Name:</label>
-                                    <input type="text" name="lastname" class="form-control" requiredn placeholder="Enter Last Name"   value="<?php echo htmlspecialchars($employee['lastname']); ?>" >
+                                    <input type="text" name="last_name" class="form-control" requiredn placeholder="Enter Last Name"   value="<?php echo htmlspecialchars($employee['last_name']); ?>" >
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label>First Name:</label>
-                                    <input type="text" name="firstname" class="form-control" placeholder="Enter First Name"  value="<?php echo htmlspecialchars($employee['firstname']); ?>" >
+                                    <input type="text" name="first_name" class="form-control" placeholder="Enter First Name"  value="<?php echo htmlspecialchars($employee['first_name']); ?>" >
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label>Middle Name:</label>
-                                    <input type="text" name="middlename" class="form-control" placeholder="Enter Middle Name"   value="<?php echo htmlspecialchars($employee['middlename']); ?>" >
+                                    <input type="text" name="middle_name" class="form-control" placeholder="Enter Middle Name"   value="<?php echo htmlspecialchars($employee['middle_name']); ?>" >
                                 </div>
                               
                                 <div class="col-md-4 mb-3">
@@ -107,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_no'])) {
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label>Salary:</label>
-                                    <input type="text" name="salary" class="form-control" placeholder="Enter Salary"  value="<?php echo htmlspecialchars($employee['salary']); ?>">
+                                    <input type="text" name="salary_grade" class="form-control" placeholder="Enter Salary"  value="<?php echo htmlspecialchars($employee['salary_grade']); ?>">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label>Date of Filing:</label>
@@ -258,7 +290,7 @@ function printContent(elementId) {
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-    window.location.reload(); // Reload the page to restore the original content
+    window.location.reload(); 
 }
 </script>
 

@@ -16,9 +16,9 @@ $voluntary_work = null;
 $other_info = null;
 $learning_development = null;
 
-if (isset($_GET['token'])) {
-    $token = $_GET['token'];
-    $employee_no = decrypt_id($token);
+if (isset($_GET['employee_no'])) {
+    $employee_no = $_GET['employee_no'];
+  
 
     if ($employee_no !== false) {
     // Personal Info Query

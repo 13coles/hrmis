@@ -10,7 +10,7 @@ require_once './config/conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employee_id'])) {
     $employee_id = intval($_POST['employee_id']);
     
-    // Updated query with full_name and proper aliases
+  
     $query = "
         SELECT 
             e.id AS employee_id, 

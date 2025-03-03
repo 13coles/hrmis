@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Escaped variables for employee
+    $employee_id = mysqli_real_escape_string($conn, $_POST['id']); #make sure may amoni kani sa code mo
     $employee_type = mysqli_real_escape_string($conn, $_POST['employee_type']);
     $employee_no = mysqli_real_escape_string($conn, $_POST['employee_no']);
     $date_hired = mysqli_real_escape_string($conn, $_POST['date_hired']);
@@ -50,33 +51,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $salary_grade = mysqli_real_escape_string($conn, $_POST['salary_grade']);
     $step = mysqli_real_escape_string($conn, $_POST['step']);
 
-    // Start updating employee record
     $query = "UPDATE employees SET 
-        employee_type = ?, 
-        date_hired = ?, 
-        status = ?, 
-        last_name = ?, 
-        first_name = ?, 
-        middle_name = ?, 
-        extension_name = ?, 
-        sex = ?, 
-        civil_status = ?, 
-        birth_date = ?, 
-        birth_place = ?, 
-        contact_number = ?, 
-        height = ?, 
-        weight = ?, 
-        educational_attainment = ?, 
-        course = ?, 
-        blood_type = ?, 
-        nationality = ?, 
-        spouse_name = ?, 
-        spouse_occupation = ?, 
-        department_name = ?, 
-        position = ?, 
-        salary_grade = ?, 
-        step = ? 
-        WHERE employee_no = ?";
+            employee_type = ?, 
+            date_hired = ?, 
+            status = ?, 
+            last_name = ?, 
+            first_name = ?, 
+            middle_name = ?, 
+            extension_name = ?, 
+            sex = ?, 
+            civil_status = ?, 
+            birth_date = ?, 
+            birth_place = ?, 
+            contact_number = ?, 
+            height = ?, 
+            weight = ?, 
+            educational_attainment = ?, 
+            course = ?, 
+            blood_type = ?, 
+            nationality = ?, 
+            spouse_name = ?, 
+            spouse_occupation = ?, 
+            department_name = ?, 
+            position = ?, 
+            salary_grade = ?, 
+            step = ? 
+            WHERE employee_no = ?";
 
     $stmt = $conn->prepare($query);
     $stmt->bind_param(
@@ -135,6 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update government_ids table
         if (!empty($_POST['gsis_number'])) {
             $gsis_number = mysqli_real_escape_string($conn, $_POST['gsis_number']);
+            $tin_number = mysqli_real_escape_string($conn, $_POST['tin_number']); #make sure may amoni kani sa code mo
             $sss_number = mysqli_real_escape_string($conn, $_POST['sss_number']);
             $philhealth_number = mysqli_real_escape_string($conn, $_POST['philhealth_number']);
             $pagibig_number = mysqli_real_escape_string($conn, $_POST['pagibig_number']);
@@ -143,6 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $prc_expiry_date = mysqli_real_escape_string($conn, $_POST['prc_expiry_date']);
             $government_query = "UPDATE government_ids SET 
                 gsis_number = ?, 
+                tin_number = ?, #make sure may amoni kani sa code mo
                 sss_number = ?, 
                 philhealth_number = ?, 
                 pagibig_number = ?, 
@@ -151,12 +153,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 prc_expiry_date = ? 
                 WHERE employee_id = ?";
             $government_stmt = $conn->prepare($government_query);
-            $government_stmt->bind_param("sssssssi", $gsis_number, $sss_number, $philhealth_number, $pagibig_number, $eligibility, $prc_number, $prc_expiry_date, $employee_id);
-            $government_stmt->execute();
+            $government_stmt->bind_param("ssssssssi", $gsis_number, $tin_number, $sss_number, $philhealth_number, $pagibig_number, $eligibility, $prc_number, $prc_expiry_date, $employee_id);
+            $government_stmt->execute(); # make sure mo tsakto bindparam mo sa query
             $government_stmt->close();
         }
 
-        $_SESSION['success'] = "Employee data successfully updated!";
+        $_SESSION['info'] = "Employee data successfully updated!";
         header('Location: ../permanent.php');
         exit();
     } else {

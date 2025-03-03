@@ -1,17 +1,12 @@
 <?php
+//was modified
+//you have option to null the columns of last name to extention name or delete the columns depends on you.
 session_start();
-
 require_once '../config/conn.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Gather form data
-    $employee_no = trim($_POST['employee_no']);
-    $office = trim($_POST['office']);
-    $lastname = trim($_POST['lastname']);
-    $firstname = trim($_POST['firstname']);
-    $middlename = trim($_POST['middlename']);
-    $position = trim($_POST['position']);
-    $salary = trim($_POST['salary']);
+    $employee_id = ($_POST['employee_id']);
     $dateofFilling = trim($_POST['dateofFilling']);
     $typeofLeave = trim($_POST['typeofLeave']);
     $others = trim($_POST['others']);
@@ -38,11 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Insert new leave application
     $stmt = $conn->prepare("INSERT INTO appleave
-        (employee_no, office, lastname, firstname, middlename, position, salary, dateofFilling, typeofLeave, others, vacationleave, sickleave, specialleave, studyleave, otherpurpose, numberofWork, inclusiveDate_from, inclusiveDate_to, commutation, certificationofLeave, sickTotal, vacationTotal, vacationLess, sickLess, vacationBalance, sickBalance, recommendation, forDisapproval, approved, disapproved)
+        (employee_id, office, lastname, firstname, middlename, position, salary, dateofFilling, typeofLeave, others, vacationleave, sickleave, specialleave, studyleave, otherpurpose, numberofWork, inclusiveDate_from, inclusiveDate_to, commutation, certificationofLeave, sickTotal, vacationTotal, vacationLess, sickLess, vacationBalance, sickBalance, recommendation, forDisapproval, approved, disapproved)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param(
-        "ssssssssssssssssssssssssssssss",
-        $employee_no,
+        "isssssssssssssssssssssssssssss",
+        $employee_id,
         $office,
         $lastname,
         $firstname,
@@ -76,8 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         // Get the most recent record for the employee using employee_no
-        $latest_query = $conn->prepare("SELECT id FROM pelc WHERE employee_no = ? ORDER BY created_at DESC LIMIT 1");
-        $latest_query->bind_param("s", $employee_no);
+        $latest_query = $conn->prepare("SELECT id FROM pelc WHERE employee_id = ? ORDER BY created_at DESC LIMIT 1");
+        $latest_query->bind_param("i", $employee_id);
         $latest_query->execute();
         $latest_query->bind_result($latest_id);
         $latest_query->fetch();
@@ -86,15 +81,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Update the most recent record for lt_wp_vac and lt_wp_sck
         $update_lt_wp_query = $conn->prepare("UPDATE pelc 
             SET lt_wp_vac = lt_wp_vac + ?, lt_wp_sck = lt_wp_sck + ? 
-            WHERE employee_no = ? AND id = ?");
-        $update_lt_wp_query->bind_param("ddsi", $vacationLess, $sickLess, $employee_no, $latest_id);
+            WHERE employee_id = ? AND id = ?");
+        $update_lt_wp_query->bind_param("ddii", $vacationLess, $sickLess, $employee_id, $latest_id);
 
         if ($update_lt_wp_query->execute()) {
             // Update the leave balance for b_vac and b_sck
             $balance_query = $conn->prepare("UPDATE pelc 
                 SET b_vac = b_vac - ?, b_sck = b_sck - ? 
-                WHERE employee_no = ? AND id = ?");
-            $balance_query->bind_param("ddsi", $vacationLess, $sickLess, $employee_no, $latest_id);
+                WHERE employee_id = ? AND id = ?");
+            $balance_query->bind_param("ddii", $vacationLess, $sickLess, $employee_id, $latest_id);
 
             if ($balance_query->execute()) {
                 $_SESSION['success'] = "Leave application submitted successfully!";

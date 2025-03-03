@@ -1,6 +1,6 @@
 <?php
+//was change
 require_once '../config/conn.php';
-require '../util/encrypt_helper.php';
 
 session_start();
 
@@ -36,8 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$stmt) {
         $_SESSION['error'] = "Database error: " . $conn->error;
-        $token = encrypt_id($employee_id);
-        header("Location: ../leaveCard.php?token=$token");
+        header("Location: ../leaveCard.php?id=" . $employee_id);
         exit();
     }
 
@@ -69,9 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = "Database error: " . $stmt->error;
     }
 
-    // Redirect user back with encrypted token
-    $token = encrypt_id($employee_id);
-    header("Location: ../leaveCard.php?token=$token");
+    header("Location: ../leaveCard.php?id=" . $employee_id);
     exit();
 }
 ?>

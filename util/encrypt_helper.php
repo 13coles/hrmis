@@ -7,13 +7,13 @@ function encrypt_id($id) {
     if ($encrypted === false) {
         throw new Exception("Encryption failed");
     }
-    return urlencode(base64_encode($iv . $encrypted));
+    return base64_encode($iv . $encrypted); 
 }
 
 function decrypt_id($encrypted_id) {
     $key = "BSIT-hrmis-system"; 
     $key = hash('sha256', $key, true); 
-    $data = base64_decode(urldecode($encrypted_id));
+    $data = base64_decode($encrypted_id); 
     if ($data === false || strlen($data) <= openssl_cipher_iv_length('AES-256-CBC')) {
         return false; 
     }
@@ -22,4 +22,5 @@ function decrypt_id($encrypted_id) {
     $encrypted = substr($data, $iv_length); 
     return openssl_decrypt($encrypted, 'AES-256-CBC', $key, 0, $iv);
 }
+
 ?>

@@ -1,4 +1,5 @@
 <?php 
+//change
 session_start();
 require_once './config/conn.php';
 if (!isset($_SESSION['user_id'])) {
@@ -6,10 +7,18 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Fetch employee records from the database
-$query = "SELECT * FROM appleave";
-$result = mysqli_query($conn, $query);
+$query = "SELECT 
+    e.id,
+    e.employee_no, 
+    TRIM(CONCAT(e.first_name, ' ', COALESCE(e.middle_name, ''), ' ', e.last_name, ' ', COALESCE(e.extension_name, ''))) AS employee_name, 
+    e.department_name, 
+    e.position, 
+    a.typeofLeave, 
+    a.numberofWork
+FROM appleave a
+INNER JOIN employees e ON a.employee_id = e.id;";
 
+$result = mysqli_query($conn, $query);
 ?>
 
 <!DOCTYPE html>
@@ -79,8 +88,8 @@ $result = mysqli_query($conn, $query);
                                 ?>
                                     <tr>
                                         <td><?php echo $row['employee_no']; ?></td>
-                                        <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
-                                        <td><?php echo $row['office']; ?></td>
+                                        <td><?php echo $row['employee_name']; ?></td>
+                                        <td><?php echo $row['department_name']; ?></td>
                                         <td><?php echo $row['position']; ?></td>
                                         <td><?php echo $row['typeofLeave']; ?></td>
                                         <td><?php echo $row['numberofWork']; ?></td>
@@ -88,13 +97,10 @@ $result = mysqli_query($conn, $query);
                                             <div class="dropdown d-flex justify-content-center">
                                                 <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <!-- View -->
-                                                    <form action="viewLeave.php" method="POST" class="mb-0">
-                                                        <input type="hidden" name="employee_no" value="<?php echo $row['employee_no']; ?>">
-                                                        <button type="submit" class="dropdown-item text-sm">
-                                                            <i class="fas fa-file-alt text-primary me-2"></i> View More
-                                                        </button>
-                                                    </form>
+                                                    <!-- View Button as <a> tag -->
+                                                    <a href="viewLeave.php?employee_id=<?php echo $row['id']; ?>" class="dropdown-item text-sm">
+                                                        <i class="fas fa-file-alt text-primary me-2"></i> View More
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>

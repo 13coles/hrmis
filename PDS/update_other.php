@@ -16,16 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $skills = isset($_POST['skills']) ? implode(',', (array)$_POST['skills']) : null;
     $non_academic = isset($_POST['non_academic']) ? implode(',', (array)$_POST['non_academic']) : null;
     $membership = isset($_POST['membership']) ? implode(',', (array)$_POST['membership']) : null;
-    $if_third = isset($_POST['if_third']) ? 'no' : 'yes';
-    $if_fourth = isset($_POST['if_fourth']) ? 'no' : 'yes';
-    $if_guilty = isset($_POST['if_guilty']) ? 'no' : 'yes';
-    $if_criminal = isset($_POST['if_criminal']) ? 'no' : 'yes';
-    $if_convicted = isset($_POST['if_convicted']) ? 'no' : 'yes';
-    $if_separated = isset($_POST['if_separated']) ? 'no' : 'yes';
-    $if_candidate = isset($_POST['if_candidate']) ? 'no' : 'yes';
-    $if_resigned = isset($_POST['if_resigned']) ? 'no' : 'yes';
-    $if_immigrant = isset($_POST['if_immigrant']) ? 'no' : 'yes';
-    $if_indigenous = isset($_POST['if_indigenous']) ? 'no' : 'yes';
+    
+    $if_third = $_POST['if_third'] ?? null;
+    $if_fourth = $_POST['if_fourth'] ?? null;
+    $if_guilty = $_POST['if_guilty'] ?? null;
+    $if_criminal = $_POST['if_criminal'] ?? null;
+    $if_convicted = $_POST['if_convicted'] ?? null;
+    $if_separated = $_POST['if_separated'] ?? null;
+    $if_candidate = $_POST['if_candidate'] ?? null;
+    $if_resigned = $_POST['if_resigned'] ?? null;
+    $if_immigrant = $_POST['if_immigrant'] ?? null;
+    $if_indigenous = $_POST['if_indigenous'] ?? null;
+    
 
     // Handle optional references
     $ref_nameq = $_POST['ref_nameq'] ?? null;

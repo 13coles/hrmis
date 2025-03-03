@@ -1,4 +1,5 @@
 <?php
+//this was change
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -8,9 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 require_once './config/conn.php';
 require './util/encrypt_helper.php';
 
-if (isset($_GET['token'])) {
-    $token = $_GET['token'];
-    $employee_id = decrypt_id($token);
+if (isset($_GET['id'])) {
+    $id = $_GET['id']; 
+    
+    // Employee details query
     $employeeQuery = "SELECT 
                         e.id AS employee_id, 
                         CONCAT(e.last_name, ', ', e.first_name, ' ', IFNULL(e.middle_name, ''), ' ', IFNULL(e.extension_name, '')) AS full_name,
@@ -20,7 +22,7 @@ if (isset($_GET['token'])) {
                       FROM employees e
                       WHERE e.id = ?";
     $stmt = $conn->prepare($employeeQuery);
-    $stmt->bind_param('i', $employee_id);
+    $stmt->bind_param('i', $id); 
     $stmt->execute();
     $employeeResult = $stmt->get_result();
     if ($employeeResult->num_rows > 0) {
@@ -29,12 +31,14 @@ if (isset($_GET['token'])) {
         echo "No employee record found.";
         exit();
     }
+
+    // Emergency contact details query
     $emergencyContactQuery = "SELECT 
                                 ec.person_name, ec.relationship, ec.tel_no, ec.e_street, ec.e_barangay, ec.e_city, ec.e_province
                               FROM emergency_contacts ec
                               WHERE ec.employee_id = ?";
     $stmt = $conn->prepare($emergencyContactQuery);
-    $stmt->bind_param('i', $employee_id);
+    $stmt->bind_param('i', $id); 
     $stmt->execute();
     $emergencyContactResult = $stmt->get_result();
     if ($emergencyContactResult->num_rows > 0) {
@@ -42,13 +46,15 @@ if (isset($_GET['token'])) {
     } else {
         $emergencyContact = null; 
     }
+
+    // Government IDs details query
     $governmentIdsQuery = "SELECT 
                             g.gsis_number, g.sss_number, g.tin_number, g.philhealth_number, g.pagibig_number, 
                             g.eligibility, g.prc_number, g.prc_expiry_date
                           FROM government_ids g
                           WHERE g.employee_id = ?";
     $stmt = $conn->prepare($governmentIdsQuery);
-    $stmt->bind_param('i', $employee_id);
+    $stmt->bind_param('i', $id);
     $stmt->execute();
     $governmentIdsResult = $stmt->get_result();
     if ($governmentIdsResult->num_rows > 0) {
@@ -56,22 +62,23 @@ if (isset($_GET['token'])) {
     } else {
         $governmentIds = null; 
     }
+
+    // Address details query
     $addressQuery = "SELECT 
                             a.street, a.barangay, a.city, a.province
                         FROM address a
                         WHERE a.employee_id = ?";
     $stmt = $conn->prepare($addressQuery);
-    $stmt->bind_param('i', $employee_id);
+    $stmt->bind_param('i', $id);
     $stmt->execute();
     $addressResult = $stmt->get_result();
     if ($addressResult->num_rows > 0) {
-    $address = $addressResult->fetch_assoc();
+        $address = $addressResult->fetch_assoc();
     } else {
-    $address = null; 
+        $address = null; 
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,9 +106,10 @@ if (isset($_GET['token'])) {
                 </h4>
 
                 <div class="d-flex align-items-center">
-                    <?php $token = encrypt_id($employee['employee_id']);?>
-                     <a href="editPRecord.php?token=<?php echo $token; ?>" class="btn btn-primary-outline btn-sm mr-3">
-                    <i class="fas fa-edit"></i> Edit Record</a>
+                <a href="editPRecord.php?employee_id=<?php echo $employee['employee_id']; ?>" class="btn btn-primary-outline btn-sm mr-3">
+                    <i class="fas fa-edit"></i> Edit Record
+                </a>
+
 
                     <?php $token = encrypt_id($employee['employee_id']);?>
                     <a href="printRecord.php?token=<?php echo $token; ?>" class="btn btn-primary"><i class="fas fa-print"></i> Print</a>

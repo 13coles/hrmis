@@ -91,7 +91,6 @@ require_once './config/conn.php';
                                 <!-- Submission Buttons -->
                                 <div class="col-12 text-right mt-3">
                                     <button type="submit" class="btn btn-primary">Submit</button>
-                                    <a href="PDS.php" class="btn btn-secondary">Cancel</a>
                                 </div>
                             </div>
                         </form>

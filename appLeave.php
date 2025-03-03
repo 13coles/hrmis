@@ -1,4 +1,5 @@
 <?php
+//this was change
 session_start();
 require_once './config/conn.php';
 ?>
@@ -60,40 +61,24 @@ require_once './config/conn.php';
                         </div>
                         <div class="card-body">
                             <div class="row">
-
                                 <div class="col-md-6 mb-3">
-                                    <label>Employee No:</label>
-                                    <input type="text" name="employee_no" class="form-control" required placeholder="Enter Employee No">
+                                    <label>Employee Name:</label>
+                                    <select id="employeeSelect" name="employee_id" class="form-control" required>
+                                        <option value="">Select Employee</option>
+                                        <?php
+                                        $query = "SELECT id, first_name, middle_name, last_name FROM employees WHERE employee_type = 'permanent'";
+                                        $result = mysqli_query($conn, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value='{$row['id']}'>{$row['last_name']}, {$row['first_name']} {$row['middle_name']}</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label>Office/Department-District/School:</label>
-                                    <input type="text" name="office" class="form-control" required placeholder="Enter Office">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Last Name:</label>
-                                    <input type="text" name="lastname" class="form-control" requiredn placeholder="Enter Last Name">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>First Name:</label>
-                                    <input type="text" name="firstname" class="form-control" required placeholder="Enter First Name">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Middle Name:</label>
-                                    <input type="text" name="middlename" class="form-control" placeholder="Enter Middle Name" required>
-                                </div>
-                              
-                                <div class="col-md-4 mb-3">
-                                    <label>Position:</label>
-                                    <input type="text" name="position" class="form-control" required placeholder="Enter your Position">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Salary:</label>
-                                    <input type="text" name="salary" class="form-control" required placeholder="Enter Salary">
-                                </div>
-                                <div class="col-md-4 mb-3">
                                     <label>Date of Filing:</label>
                                     <input type="date" name="dateofFilling" class="form-control" required>
                                 </div>
+                       
                                 
                             </div>
                             <div class="card-header">
