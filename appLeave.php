@@ -185,6 +185,7 @@ require_once './config/conn.php';
                                         <label class="control-label"></label>
                                         <input type="text" name="fname" class="form-control" placeholder="Less this application" readonly>
                                     </div>
+                                    <!-- Less -->
                                     <div class="col-md-4 mb-3">
                                         <label for="vacationLess" class="control-label"></label>
                                         <input type="text" id="vacationLess" name="vacationLess" class="form-control" placeholder="Enter Vacation Less">
@@ -197,6 +198,7 @@ require_once './config/conn.php';
                                         <label class="control-label"></label>
                                         <input type="text" name="fname" class="form-control" placeholder="Balance" readonly>
                                     </div>
+                                    <!-- less end -->
                                     <div class="col-md-4 mb-3">
                                         <label for="vacationBalance" class="control-label"></label>
                                         <input type="text" id="vacationBalance" name="vacationBalance" class="form-control" placeholder="Enter Vacation Balance">

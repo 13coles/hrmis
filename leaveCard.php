@@ -53,7 +53,7 @@ if (isset($_GET['id'])) {
             p_date
         FROM pelc 
         WHERE employee_id = ? 
-        ORDER BY year ASC, id ASC
+        ORDER BY id ASC
     ");
     $leaveCardQuery->bind_param("i", $id);
     $leaveCardQuery->execute();
@@ -115,7 +115,7 @@ if (isset($_GET['id'])) {
                                     <div>
                                         <?php $token = encrypt_id($employee['employee_id']);?>
                                         <a href="addNewCredits.php?token=<?php echo $token; ?>" class="btn btn-primary">
-                                            Add New Credits
+                                            Insert
                                         </a>
                                         <?php $token = encrypt_id($employee['employee_id']);?>
                                         <a href="print-leaveCard.php?token=<?php echo $token; ?>" class="btn btn-primary">
@@ -161,27 +161,26 @@ if (isset($_GET['id'])) {
                                         <?php else: ?>
                                             <?php while ($card = $leaveCardResult->fetch_assoc()): ?>
                                             <tr>
-                                                <td><?= htmlspecialchars($card['year']) ?></td>
-                                                <td><?= htmlspecialchars($card['le_vac']) ?></td>
-                                                <td><?= htmlspecialchars($card['le_sck']) ?></td>
+                                                <td><?= !empty($card['year']) && $card['year'] != 0 ? htmlspecialchars($card['year']) : '' ?></td>
+                                                <td><?= $card['le_vac'] != 0 ? htmlspecialchars($card['le_vac']) : '' ?></td>
+                                                <td><?= $card['le_sck'] != 0 ? htmlspecialchars($card['le_sck']) : '' ?></td>
                                                 <td><?= htmlspecialchars($card['from_to']) ?></td>
-                                                <td><?= htmlspecialchars($card['lt_wp_vac']) ?></td>
-                                                <td><?= htmlspecialchars($card['lt_wp_sck']) ?></td>
-                                                <td><?= htmlspecialchars($card['lt_np_vac']) ?></td>
-                                                <td><?= htmlspecialchars($card['lt_np_sck']) ?></td>
-                                                <td><?= htmlspecialchars($card['u_vac']) ?></td>
-                                                <td><?= htmlspecialchars($card['u_sck']) ?></td>
-                                                <td><?= htmlspecialchars($card['b_vac']) ?></td>
-                                                <td><?= htmlspecialchars($card['b_sck']) ?></td>
-                                                <td><?= htmlspecialchars($card['p_initial']) ?></td>
-                                                <td><?= htmlspecialchars($card['p_date']) ?></td>
+                                                <td><?= $card['lt_wp_vac'] != 0 ? htmlspecialchars($card['lt_wp_vac']) : '' ?></td>
+                                                <td><?= $card['lt_wp_sck'] != 0 ? htmlspecialchars($card['lt_wp_sck']) : '' ?></td>
+                                                <td><?= $card['lt_np_vac'] != 0 ? htmlspecialchars($card['lt_np_vac']) : '' ?></td>
+                                                <td><?= $card['lt_np_sck'] != 0 ? htmlspecialchars($card['lt_np_sck']) : '' ?></td>
+                                                <td><?= $card['u_vac'] != 0 ? htmlspecialchars($card['u_vac']) : '' ?></td>
+                                                <td><?= $card['u_sck'] != 0 ? htmlspecialchars($card['u_sck']) : '' ?></td>
+                                                <td><?= $card['b_vac'] != 0 ? htmlspecialchars($card['b_vac']) : '' ?></td>
+                                                <td><?= $card['b_sck'] != 0 ? htmlspecialchars($card['b_sck']) : '' ?></td>
+                                                <td><?= !empty($card['p_initial']) && $card['p_initial'] != 0 ? htmlspecialchars($card['p_initial']) : '' ?></td>
+                                                <td><?= !empty($card['p_date']) && $card['p_date'] != '0000-00-00' ? htmlspecialchars($card['p_date']) : '' ?></td>
                                                 <td>
                                                     <a href="edit_leave_card.php?id=<?= $card['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
                                                 </td> 
                                             </tr>
                                             <?php endwhile; ?>
                                         <?php endif; ?>
-
                                     </tbody>
                                 </table>
                             </div>

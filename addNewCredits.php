@@ -130,7 +130,7 @@ if (isset($_GET['token'])) {
                             <input type="hidden" name="employee_no" value="<?= htmlspecialchars($employee['employee_no'])?>">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <h5>Add New Credits for Leave Card</h5>
+                                    <h5>Insert New Record</h5>
                                 </div>
                                 <div class="card-body p-5">
                                     <fieldset class="col-12 mb-4">
@@ -142,11 +142,11 @@ if (isset($_GET['token'])) {
                                             </div>
                                             <div class="col-md-3">
                                                 <label>Vacation:</label>
-                                                <input type="number" step="0.01" name="le_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['le_vac'] ?? '') ?>">
+                                                <input type="number" step="1" name="le_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['le_vac'] ?? '') ?>">
                                             </div>
                                             <div class="col-md-3">
                                                 <label>Sick:</label>
-                                                <input type="number" step="0.01" name="le_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['le_sck'] ?? '') ?>">
+                                                <input type="number" step="1" name="le_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['le_sck'] ?? '') ?>">
                                             </div>
                                             <div class="col-md-3">
                                                 <label>Credits From - To:</label>
@@ -160,19 +160,19 @@ if (isset($_GET['token'])) {
                                         <div class="row">
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">With Pay Vacation:</label>
-                                                <input type="number" step="0.01" name="lt_wp_vac" class="form-control"  value="<?= htmlspecialchars($leaveCard['lt_wp_vac'] ?? '') ?>" placeholder="Enter Leave with Pay Vacation">
+                                                <input type="number" step="1" name="lt_wp_vac" class="form-control"  value="<?= htmlspecialchars($leaveCard['lt_wp_vac'] ?? '') ?>" placeholder="Enter Leave with Pay Vacation">
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">With Pay Sick:</label>
-                                                <input type="number" step="0.01" name="lt_wp_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['lt_wp_sck'] ?? '') ?>" placeholder="Enter Leave with Pay Sick">
+                                                <input type="number" step="1" name="lt_wp_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['lt_wp_sck'] ?? '') ?>" placeholder="Enter Leave with Pay Sick">
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Without Pay Vacation:</label>
-                                                <input type="number" step="0.01" name="lt_np_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['lt_np_vac'] ?? '') ?>" placeholder="Enter Leave without Pay Vacation">
+                                                <input type="number" step="1" name="lt_np_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['lt_np_vac'] ?? '') ?>" placeholder="Enter Leave without Pay Vacation">
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Without Pay Sick:</label>
-                                                <input type="number" step="0.01" name="lt_np_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['lt_np_sck'] ?? '') ?>" placeholder="Enter Leave without Pay Sick">
+                                                <input type="number" step="1" name="lt_np_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['lt_np_sck'] ?? '') ?>" placeholder="Enter Leave without Pay Sick">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -182,11 +182,11 @@ if (isset($_GET['token'])) {
                                         <div class="row">
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Unpaid Vacation:</label>
-                                                <input type="number" step="0.01" name="u_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['u_vac'] ?? '') ?>" placeholder="Enter Unpaid Vacation">
+                                                <input type="number" step="1" name="u_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['u_vac'] ?? '') ?>" placeholder="Enter Unpaid Vacation">
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Unpaid Sick:</label>
-                                                <input type="number" step="0.01" name="u_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['u_sck'] ?? '') ?>" placeholder="Enter Unpaid Sick">
+                                                <input type="number" step="1" name="u_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['u_sck'] ?? '') ?>" placeholder="Enter Unpaid Sick">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -196,11 +196,11 @@ if (isset($_GET['token'])) {
                                         <div class="row">
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Vacation Balance:</label>
-                                                <input type="number" step="0.01" name="b_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['b_vac'] ?? '') ?>" placeholder="Enter Vacation Balance">
+                                                <input type="number" step="1" name="b_vac" class="form-control" value="<?= htmlspecialchars($leaveCard['b_vac'] ?? '') ?>" placeholder="Enter Vacation Balance">
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Sick Balance:</label>
-                                                <input type="number" step="0.01" name="b_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['b_sck'] ?? '') ?>" placeholder="Enter Sick Balance">
+                                                <input type="number" step="1" name="b_sck" class="form-control" value="<?= htmlspecialchars($leaveCard['b_sck'] ?? '') ?>" placeholder="Enter Sick Balance">
                                             </div>
                                         </div>
                                     </fieldset>

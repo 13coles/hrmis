@@ -1,6 +1,4 @@
 <?php
-//was modified
-//you have option to null the columns of last name to extention name or delete the columns depends on you.
 session_start();
 require_once '../config/conn.php';
 
@@ -31,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $approved = trim($_POST['approved']);
     $disapproved = trim($_POST['disapproved']);
 
-    // Insert new leave application
+    // Insert new leave application into appleave
     $stmt = $conn->prepare("INSERT INTO appleave
         (employee_id, office, lastname, firstname, middlename, position, salary, dateofFilling, typeofLeave, others, vacationleave, sickleave, specialleave, studyleave, otherpurpose, numberofWork, inclusiveDate_from, inclusiveDate_to, commutation, certificationofLeave, sickTotal, vacationTotal, vacationLess, sickLess, vacationBalance, sickBalance, recommendation, forDisapproval, approved, disapproved)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -70,43 +68,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     if ($stmt->execute()) {
-        // Get the most recent record for the employee using employee_no
-        $latest_query = $conn->prepare("SELECT id FROM pelc WHERE employee_id = ? ORDER BY created_at DESC LIMIT 1");
+        // Format "from_to" as required
+        $from_to = "LESS " . date("M d/Y", strtotime($inclusiveDate_from)) . " / " . date("M d/Y", strtotime($inclusiveDate_to));
+
+        // Get the latest balance for the employee
+        $latest_query = $conn->prepare("SELECT b_vac, b_sck FROM pelc WHERE employee_id = ? ORDER BY id DESC LIMIT 1");
         $latest_query->bind_param("i", $employee_id);
         $latest_query->execute();
-        $latest_query->bind_result($latest_id);
+        $latest_query->bind_result($prev_b_vac, $prev_b_sck);
         $latest_query->fetch();
         $latest_query->close();
 
-        // Update the most recent record for lt_wp_vac and lt_wp_sck
-        $update_lt_wp_query = $conn->prepare("UPDATE pelc 
-            SET lt_wp_vac = lt_wp_vac + ?, lt_wp_sck = lt_wp_sck + ? 
-            WHERE employee_id = ? AND id = ?");
-        $update_lt_wp_query->bind_param("ddii", $vacationLess, $sickLess, $employee_id, $latest_id);
+        // Ensure previous values are set
+        $prev_b_vac = $prev_b_vac ?? 0;
+        $prev_b_sck = $prev_b_sck ?? 0;
 
-        if ($update_lt_wp_query->execute()) {
-            // Update the leave balance for b_vac and b_sck
-            $balance_query = $conn->prepare("UPDATE pelc 
-                SET b_vac = b_vac - ?, b_sck = b_sck - ? 
-                WHERE employee_id = ? AND id = ?");
-            $balance_query->bind_param("ddii", $vacationLess, $sickLess, $employee_id, $latest_id);
+        // Calculate new balance values
+        $new_b_vac = $prev_b_vac - $vacationLess;
+        $new_b_sck = $prev_b_sck - $sickLess;
 
-            if ($balance_query->execute()) {
-                $_SESSION['success'] = "Leave application submitted successfully!";
-            } else {
-                $_SESSION['error'] = "Error updating leave balance: " . $balance_query->error;
-            }
-            $balance_query->close();
+        // Insert new row into pelc
+        $insert_stmt = $conn->prepare("INSERT INTO pelc (employee_id, from_to, lt_wp_vac, lt_wp_sck, b_vac, b_sck) VALUES (?, ?, ?, ?, ?, ?)");
+        $insert_stmt->bind_param("issddd", $employee_id, $from_to, $vacationLess, $sickLess, $new_b_vac, $new_b_sck);
+
+        if ($insert_stmt->execute()) {
+            $_SESSION['success'] = "Leave application submitted successfully!";
         } else {
-            $_SESSION['error'] = "Error updating leave balances: " . $update_lt_wp_query->error;
+            $_SESSION['error'] = "Error inserting leave record: " . $insert_stmt->error;
         }
-        $update_lt_wp_query->close();
+        $insert_stmt->close();
     } else {
         $_SESSION['error'] = "Error inserting leave application: " . $stmt->error;
     }
     $stmt->close();
-} else {
-    $_SESSION['error'] = "Invalid request method.";
 }
 
 $conn->close();
