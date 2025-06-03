@@ -52,40 +52,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $step = mysqli_real_escape_string($conn, $_POST['step']);
 
     $query = "UPDATE employees SET 
-            employee_type = ?, 
-            date_hired = ?, 
-            status = ?, 
-            last_name = ?, 
-            first_name = ?, 
-            middle_name = ?, 
-            extension_name = ?, 
-            sex = ?, 
-            civil_status = ?, 
-            birth_date = ?, 
-            birth_place = ?, 
-            contact_number = ?, 
-            height = ?, 
-            weight = ?, 
-            educational_attainment = ?, 
-            course = ?, 
-            blood_type = ?, 
-            nationality = ?, 
-            spouse_name = ?, 
-            spouse_occupation = ?, 
-            department_name = ?, 
-            position = ?, 
-            salary_grade = ?, 
-            step = ? 
-            WHERE employee_no = ?";
+    employee_type = ?, 
+    date_hired = ?, 
+    status = ?, 
+    last_name = ?, 
+    first_name = ?, 
+    middle_name = ?, 
+    extension_name = ?, 
+    sex = ?, 
+    civil_status = ?, 
+    birth_date = ?, 
+    birth_place = ?, 
+    contact_number = ?, 
+    height = ?, 
+    weight = ?, 
+    educational_attainment = ?, 
+    course = ?, 
+    blood_type = ?, 
+    nationality = ?, 
+    spouse_name = ?, 
+    spouse_occupation = ?, 
+    department_name = ?, 
+    position = ?, 
+    salary_grade = ?, 
+    step = ? 
+    WHERE employee_no = ? AND id = ?";
 
     $stmt = $conn->prepare($query);
     $stmt->bind_param(
-        "ssssssssssssddssssssssssi",
-        $employee_type, $date_hired, $status, $last_name, $first_name, $middle_name, $extension_name, 
-        $sex, $civil_status, $birth_date, $birth_place, $contact_number, $height, $weight, $educational_attainment, 
-        $course, $blood_type, $nationality, $spouse_name, $spouse_occupation, $department_name, $position, 
-        $salary_grade, $step, $employee_no
+    "ssssssssssssddsssssssssssi",
+    $employee_type, $date_hired, $status, $last_name, $first_name, $middle_name, $extension_name, 
+    $sex, $civil_status, $birth_date, $birth_place, $contact_number, $height, $weight, $educational_attainment, 
+    $course, $blood_type, $nationality, $spouse_name, $spouse_occupation, $department_name, $position, 
+    $salary_grade, $step, $employee_no, $employee_id
     );
+
 
     if ($stmt->execute()) {
 

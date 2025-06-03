@@ -6,9 +6,31 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
-
-// Fetch employee records from the database
-$query = "SELECT id, employee_no, last_name, first_name, middle_name, extension_name, department_name, date_hired, position FROM employees WHERE employee_type = 'permanent' ";
+$query = "
+SELECT 
+    e.id,
+    e.employee_no,
+    e.last_name,
+    e.first_name,
+    e.middle_name,
+    e.extension_name,
+    e.department_name,
+    e.date_hired,
+    e.position,
+    p.b_vac AS leave_balance,
+    p.b_sck AS sick_balance
+FROM employees e
+LEFT JOIN (
+    SELECT pelc.*
+    FROM pelc
+    INNER JOIN (
+        SELECT employee_id, MAX(id) AS max_id
+        FROM pelc
+        GROUP BY employee_id
+    ) latest ON pelc.employee_id = latest.employee_id AND pelc.id = latest.max_id
+) p ON e.id = p.employee_id
+WHERE e.employee_type = 'permanent'
+";
 $result = mysqli_query($conn, $query);
 
 ?>
@@ -98,7 +120,8 @@ $result = mysqli_query($conn, $query);
                                     <th>Department</th>
                                     <th>Years In Service</th>
                                     <th>Position</th>
-                                
+                                    <th>Leave Balance</th>
+                                    <th>Sick Balanace</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,6 +158,8 @@ $result = mysqli_query($conn, $query);
 
                                     // Get position
                                     $position = $row['position'];
+                                    $leaveBalance = $row['leave_balance'] ?? '0';
+                                    $sickBalance = $row['sick_balance'] ?? '0';
                                 ?>
                                 <tr>
                                     <td><?php echo $employeeNumber; ?></td>
@@ -142,6 +167,8 @@ $result = mysqli_query($conn, $query);
                                     <td><?php echo $department; ?></td>
                                     <td><?php echo $yearsInService; ?></td>
                                     <td><?php echo $position; ?></td>
+                                    <td><?php echo $leaveBalance; ?></td>
+                                    <td><?php echo $sickBalance; ?></td>
                                   
                                 </tr>
                                 <?php } ?>
